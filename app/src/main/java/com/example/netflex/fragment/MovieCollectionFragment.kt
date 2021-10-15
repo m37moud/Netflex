@@ -1,13 +1,8 @@
 package com.example.netflex.fragment
 
-import com.example.netflex.databinding.FragmentMovieCollectionBinding
-import com.example.netflex.fragment.base.BaseFragment
+import androidx.fragment.app.Fragment
+import com.example.netflex.R
 
-class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>() {
-    override var binding: FragmentMovieCollectionBinding?
-    get() = FragmentMovieCollectionBinding.inflate(layoutInflater)
-    set(value) {}
+class MovieCollectionFragment : Fragment(R.layout.fragment_movie_collection) {
 
-    override fun manipulateView(binding: FragmentMovieCollectionBinding?) {
-    }
 }
