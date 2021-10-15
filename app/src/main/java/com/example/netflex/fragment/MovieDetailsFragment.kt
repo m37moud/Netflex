@@ -1,8 +1,9 @@
 package com.example.netflex.fragment
 
-import androidx.fragment.app.Fragment
-import com.example.netflex.R
+import com.example.netflex.databinding.FragmentMovieDetailsBinding
+import com.example.netflex.fragment.base.BaseFragment
 
-class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
+class MovieDetailsFragment :
+    BaseFragment<FragmentMovieDetailsBinding>(FragmentMovieDetailsBinding::inflate) {
 
 }
