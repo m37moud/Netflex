@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background"
-    tools:context=".activity.SplashScreenFragment">
+    tools:context=".fragment.SplashScreenFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/logo"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:src="@mipmap/logo"
@@ -22,7 +23,7 @@
         android:fontFamily="@font/righteous_regular"
         android:text="@string/netflex"
         android:textColor="@color/logo_text_cyan"
-        android:textSize="54sp"
+        android:textSize="42sp"
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

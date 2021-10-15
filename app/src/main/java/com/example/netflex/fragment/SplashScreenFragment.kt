@@ -1,20 +1,24 @@
-package com.example.netflex.activity
+package com.example.netflex.fragment
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.netflex.R
+import com.example.netflex.databinding.FragmentSplashScreenBinding
+import com.example.netflex.fragment.base.BaseFragment
 
-class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding>() {
+
+    override var binding: FragmentSplashScreenBinding?
+    get() = FragmentSplashScreenBinding.inflate(layoutInflater)
+    set(value) {}
+
+    override fun manipulateView(binding: FragmentSplashScreenBinding?) {
 
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().navigate(R.id.action_splashScreenFragment_to_movieCollectionFragment)
         }, 3000)
 
     }
+
 }
