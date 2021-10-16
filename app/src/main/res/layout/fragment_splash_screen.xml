@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/righteous_regular"
-        android:text="@string/netflex"
+        android:text="@string/app_name"
         android:textColor="@color/logo_text_cyan"
         android:textSize="42sp"
         android:layout_marginBottom="25dp"
