@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background"
-    tools:context=".fragment.MovieCollectionFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/appname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:layout_marginHorizontal="10dp"
         android:fontFamily="@font/righteous_regular"
         android:text="@string/app_name"
@@ -25,11 +24,11 @@
         android:id="@+id/rv_movies"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:spanCount="2"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="4"
         app:layout_constraintTop_toBottomOf="@id/appname"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         android:layoutAnimation="@anim/recyclerview_layout_animation"
         />
@@ -44,6 +43,5 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone"
         />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
