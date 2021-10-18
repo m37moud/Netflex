@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainnav"
+    app:startDestination="@id/splashScreenFragment">
+
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.example.netflex.fragment.SplashScreenFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+        <action
+            android:id="@+id/action_splashScreenFragment_to_movieCollectionFragment"
+            app:destination="@id/movieCollectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieCollectionFragment"
+        android:name="com.example.netflex.fragment.MovieCollectionFragment"
+        android:label="fragment_movie_collection"
+        tools:layout="@layout/fragment_movie_collection" >
+        <action
+            android:id="@+id/action_movieCollectionFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.example.netflex.fragment.MovieDetailsFragment"
+        android:label="fragment_movie_details"
+        tools:layout="@layout/fragment_movie_details" >
+        <action
+            android:id="@+id/action_movieDetailsFragment_to_movieCollectionFragment"
+            app:destination="@id/movieCollectionFragment" />
+    </fragment>
+</navigation>
