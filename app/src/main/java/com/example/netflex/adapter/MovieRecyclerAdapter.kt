@@ -7,19 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.netflex.databinding.RecyclerSampleItemBinding
 import com.example.netflex.model.ApiResponse
 import com.example.netflex.utils.RetrofitConstants
-import com.example.netflex.utils.loadPoster
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.netflex.utils.loadImageResWithGlide
 
 class MovieRecyclerAdapter(
     private var response: ApiResponse?,
     private val callBack: (page: Int) -> Unit
 ) :
-    RecyclerView.Adapter<MovieRecyclerAdapter.ViewHolder>() {
-    inner class ViewHolder(val binding: RecyclerSampleItemBinding) :
+    RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
+
+    class MovieViewHolder(val binding: RecyclerSampleItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     private var data: MutableList<ApiResponse.Movie>? = response?.results
@@ -27,8 +23,8 @@ class MovieRecyclerAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MovieRecyclerAdapter.ViewHolder {
-        return ViewHolder(
+    ): MovieViewHolder {
+        return MovieViewHolder(
             RecyclerSampleItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -37,16 +33,11 @@ class MovieRecyclerAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: MovieRecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         data ?: return
         val iv = holder.binding.ivPoster
         val uri = RetrofitConstants.IMAGE_BASE_URL + data!![position].poster_path
-        CoroutineScope(Dispatchers.IO).launch {
-            val glideBuilder = loadPoster(holder.itemView.context, uri)
-            withContext(Main) {
-                glideBuilder.into(iv)
-            }
-        }
+        iv.loadImageResWithGlide(holder.itemView.context, uri)
 
         if (position == data!!.size - 1) {
             callBack(response?.page!!)

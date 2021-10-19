@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.netflex.R
 import com.example.netflex.adapter.MovieRecyclerAdapter
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
 import com.example.netflex.fragment.base.BaseFragment

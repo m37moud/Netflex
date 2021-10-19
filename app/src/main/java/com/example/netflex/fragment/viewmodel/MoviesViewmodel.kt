@@ -5,7 +5,7 @@ import com.example.netflex.di.RetrofitComponent
 import com.example.netflex.model.ApiResponse
 import com.example.netflex.repository.MovieRepository
 
-class MainViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel() according to db implementation
+class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel() according to db implementation
 {
     private val movieRepository = MovieRepository()
 
