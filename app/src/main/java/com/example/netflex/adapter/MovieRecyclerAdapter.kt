@@ -18,7 +18,7 @@ class MovieRecyclerAdapter(
     class MovieViewHolder(val binding: RecyclerSampleItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private var data: MutableList<ApiResponse.Movie>? = response?.results
+    private var data = listOf<ApiResponse.Movie>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -36,34 +36,25 @@ class MovieRecyclerAdapter(
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         data ?: return
         val iv = holder.binding.ivPoster
-        val uri = RetrofitConstants.IMAGE_BASE_URL + data!![position].poster_path
+        val uri = RetrofitConstants.IMAGE_BASE_URL + data[position].poster_path
         iv.loadImageResWithGlide(holder.itemView.context, uri)
 
-        if (position == data!!.size - 1) {
-            callBack(response?.page!!)
+        if (position == data.size - 1) {
+            callBack(response?.page!! + 1)
         }
 
     }
 
     override fun getItemCount(): Int {
-        data ?: return 0
-        return data!!.size
+        return data.size
     }
 
     // used for filtering
     @SuppressLint("NotifyDataSetChanged") // data set is being changed completely
-    fun setData(response: ApiResponse?){
+    fun setData(response: ApiResponse?, movies: MutableList<ApiResponse.Movie>){
         this.response = response
-        this.data = response?.results
+        this.data = movies
         notifyDataSetChanged()
     }
 
-    // used for paging
-    @SuppressLint("NotifyDataSetChanged") // data set is being changed completely
-    fun addData(response: ApiResponse?){ // TODO: Remove function after configuring data flow from viewmodel
-        response?: return
-        this.data?.addAll(response.results!!)
-        this.response = response
-        notifyDataSetChanged()
-    }
 }
