@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#95FF0000"
+        android:background="@color/connection_lost_red"
         android:visibility="gone"
         android:id="@+id/connection_lost_label"
         android:gravity="center">

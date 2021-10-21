@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="default_background">#181920</color>
     <color name="logo_text_cyan">#C3F3FF</color>
+    <color name="connection_lost_red">#95FF0000</color>
 </resources>

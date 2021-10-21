@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.netflex.R
 import com.example.netflex.adapter.MovieRecyclerAdapter
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
@@ -32,14 +31,11 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
     private fun configureConnectivity() {
         connectionLiveData.observe(viewLifecycleOwner) {
             binding?.connectionLostLabel?.isVisible = !it
-            if (it && binding?.rvMovies?.adapter == null) {
+            if ((it && binding?.rvMovies?.adapter == null) || (!it && binding?.rvMovies?.adapter == null && viewmodel.movies.isNotEmpty())) {
                 // if connection restored which was lost from the oppening of the app
                 // if connection was lost while browsing we don't want to call init function
-                init()
-                setObserver()
-            }else if (!it && binding?.rvMovies?.adapter == null && viewmodel.movies.isNotEmpty()){
                 // if we rotated screen while offline
-                init()
+                initUI()
                 setObserver()
             }
         }
@@ -70,7 +66,7 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
                 }
                 else -> {}
             }
-            init()
+            initUI()
             return@setOnMenuItemClickListener false
         }
     }
@@ -81,7 +77,7 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
         }
     }
 
-    private fun init() {
+    private fun initUI() {
         if (viewmodel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
             adapter = MovieRecyclerAdapter(null, ::pagingCallback)
             adapter.setData(viewmodel.responseLiveData.value, viewmodel.movies)
@@ -94,7 +90,7 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
 
         lifecycleScope.launch(Dispatchers.Main) {
             binding?.progressImages?.isVisible = true
-            viewmodel.populateMovieRecyclerView()
+            viewmodel.addMoviesToRecyclerView()
             binding?.progressImages?.isVisible = false
         }
     }
@@ -103,7 +99,7 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
         if (!connectionLiveData.value!!) return
         lifecycleScope.launch(Dispatchers.Main) {
             binding?.progressImages?.isVisible = true
-            viewmodel.populateMovieRecyclerView(page)
+            viewmodel.addMoviesToRecyclerView(page)
             binding?.progressImages?.isVisible = false
         }
     }

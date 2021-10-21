@@ -24,7 +24,7 @@ class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel(
     val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
     val movies = mutableListOf<ApiResponse.Movie>()
 
-    suspend fun populateMovieRecyclerView(page: Int = 1){
+    suspend fun addMoviesToRecyclerView(page: Int = 1){
         var response: ApiResponse? = null
 
         when(category){
