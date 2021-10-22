@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.netflex.databinding.RecyclerSampleItemBinding
 import com.example.netflex.model.ApiResponse
 import com.example.netflex.utils.RetrofitConstants
-import com.example.netflex.utils.loadImageResWithGlide
+import com.example.netflex.utils.loadImage
 
 class MovieRecyclerAdapter(
     private var response: ApiResponse?,
@@ -37,7 +37,7 @@ class MovieRecyclerAdapter(
         data ?: return
         val iv = holder.binding.ivPoster
         val uri = RetrofitConstants.IMAGE_BASE_URL + data[position].poster_path
-        iv.loadImageResWithGlide(holder.itemView.context, uri)
+        iv.loadImage(holder.itemView.context, uri)
 
         if (position == data.size - 1) {
             callBack(response?.page!! + 1)

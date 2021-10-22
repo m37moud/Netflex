@@ -15,7 +15,7 @@ fun View.executeAnimation(context: Context, animation: Int, duration: Long) {
     this.startAnimation(anim)
 }
 
-fun ImageView.loadImageResWithGlide(context: Context, uri: String) {
+fun ImageView.loadImage(context: Context, uri: String) {
     Glide
         .with(context)
         .load(uri)
