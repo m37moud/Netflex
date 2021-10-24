@@ -1,5 +1,6 @@
 package com.example.netflex.di.module
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.netflex.di.annotation.ViewModelKey
@@ -7,31 +8,39 @@ import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
 import com.example.netflex.fragment.viewmodel.MovieDetailsViewModel
 import com.example.netflex.fragment.viewmodel.SplashScreenViewModel
 import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.multibindings.IntoMap
 import javax.inject.Singleton
 
 @Module
-interface ViewModelModule {
+class ViewModelModule {
 
-    @Binds
+    @Provides
     @IntoMap
     @ViewModelKey(SplashScreenViewModel::class)
-    fun splashViewModel(viewModel: SplashScreenViewModel): ViewModel
+    fun splashViewModel(): ViewModel{
+        return SplashScreenViewModel()
+    }
 
-    @Binds
+    @Provides
     @IntoMap
     @ViewModelKey(MovieCollectionViewModel::class)
-    fun collectionViewmodel(viewModel: MovieCollectionViewModel): ViewModel
+    fun collectionViewmodel(app: Application): ViewModel{
+        return MovieCollectionViewModel(app)
+    }
 
-    @Binds
+    @Provides
     @IntoMap
     @ViewModelKey(MovieDetailsViewModel::class)
-    fun detailsViewmodel(viewModel: MovieDetailsViewModel): ViewModel
+    fun detailsViewmodel(): ViewModel{
+        return MovieDetailsViewModel()
+    }
 
-    @Binds
+    @Provides
     @Singleton
-    fun bindViewModelFactory(viewModelFactory: MovieViewModelFactory): ViewModelProvider.Factory
+    fun provideViewModelFactory(viewModelFactory: MovieViewModelFactory): ViewModelProvider.Factory{
+        return viewModelFactory
+    }
 
 }

@@ -1,11 +1,12 @@
 package com.example.netflex.repository
 
-import com.example.netflex.di.component.DaggerAppComponent
 import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.retrofit.MovieApi
+import com.example.netflex.room_database.dao.MovieDao
+import javax.inject.Inject
 
-class MovieRepository {
-    private val movieApi = DaggerAppComponent.builder().build().getMovieApi()
-
+class MovieRepository @Inject constructor(private val movieDao: MovieDao,
+                                          private val movieApi: MovieApi) {
     suspend fun fetchPopularMovies(page: Int): ApiResponse? {
         return movieApi.getPopularMovies(page)
     }
