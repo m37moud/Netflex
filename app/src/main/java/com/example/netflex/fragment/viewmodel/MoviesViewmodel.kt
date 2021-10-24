@@ -4,8 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.netflex.di.DaggerRetrofitComponent
 import com.example.netflex.di.RetrofitComponent
-import com.example.netflex.model.ApiResponse
+import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.model.MovieEntity
 import com.example.netflex.repository.MovieRepository
+import com.example.netflex.utils.MovieCategories
 
 class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel() according to db implementation
 {
@@ -13,7 +15,7 @@ class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel(
         val daggerRetrofitComponent: RetrofitComponent = DaggerRetrofitComponent.builder().build()
     }
 
-    var category = ApiResponse.Movie.CATEGORY_TOP_RATED
+    var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
             field = value
@@ -22,19 +24,19 @@ class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel(
     private val movieRepository = MovieRepository()
     private val _responseLiveData = MutableLiveData<ApiResponse>()
     val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
-    val movies = mutableListOf<ApiResponse.Movie>()
+    val movies = mutableListOf<MovieEntity>()
 
     suspend fun addMoviesToRecyclerView(page: Int = 1){
         var response: ApiResponse? = null
 
         when(category){
-            ApiResponse.Movie.CATEGORY_POPULAR -> {
+            MovieCategories.Popular -> {
                 response = fetchPopularMovies(page)
             }
-            ApiResponse.Movie.CATEGORY_TOP_RATED -> {
+            MovieCategories.TopRated -> {
                 response = fetchTopRatedMovies(page)
             }
-            ApiResponse.Movie.CATEGORY_FAVORITES -> {} // TODO: Configure later
+            MovieCategories.Favorite -> {} // TODO: Configure later
         }
 
         _responseLiveData.value = response

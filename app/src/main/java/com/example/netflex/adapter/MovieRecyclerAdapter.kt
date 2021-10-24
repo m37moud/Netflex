@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netflex.databinding.RecyclerSampleItemBinding
-import com.example.netflex.model.ApiResponse
+import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.model.MovieEntity
 import com.example.netflex.utils.RetrofitConstants
 import com.example.netflex.utils.loadImage
 
@@ -18,7 +19,7 @@ class MovieRecyclerAdapter(
     class MovieViewHolder(val binding: RecyclerSampleItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private var data = listOf<ApiResponse.Movie>()
+    private var data = listOf<MovieEntity>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,7 +35,6 @@ class MovieRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        data ?: return
         val iv = holder.binding.ivPoster
         val uri = RetrofitConstants.IMAGE_BASE_URL + data[position].poster_path
         iv.loadImage(holder.itemView.context, uri)
@@ -51,7 +51,7 @@ class MovieRecyclerAdapter(
 
     // used for filtering
     @SuppressLint("NotifyDataSetChanged") // data set is being changed completely
-    fun setData(response: ApiResponse?, movies: MutableList<ApiResponse.Movie>){
+    fun setData(response: ApiResponse?, movies: MutableList<MovieEntity>){
         this.response = response
         this.data = movies
         notifyDataSetChanged()

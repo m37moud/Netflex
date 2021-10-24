@@ -1,7 +1,7 @@
 package com.example.netflex.repository
 
 import com.example.netflex.fragment.viewmodel.MoviesViewmodel
-import com.example.netflex.model.ApiResponse
+import com.example.netflex.retrofit.ApiResponse
 
 class MovieRepository {
     private var movieApi = MoviesViewmodel.daggerRetrofitComponent.getMovieApi()

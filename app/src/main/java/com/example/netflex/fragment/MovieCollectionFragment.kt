@@ -9,8 +9,8 @@ import com.example.netflex.R
 import com.example.netflex.adapter.MovieRecyclerAdapter
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
 import com.example.netflex.fragment.base.BaseFragment
-import com.example.netflex.model.ApiResponse
 import com.example.netflex.utils.ConnectionLiveData
+import com.example.netflex.utils.MovieCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -53,16 +53,16 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
             val category = viewmodel.category
             when (it.itemId) {
                 R.id.item_popular -> {
-                    if (category != ApiResponse.Movie.CATEGORY_POPULAR) viewmodel.category =
-                        ApiResponse.Movie.CATEGORY_POPULAR
+                    if (category != MovieCategories.Popular) viewmodel.category =
+                        MovieCategories.Popular
                 }
                 R.id.item_top_rated -> {
-                    if (category != ApiResponse.Movie.CATEGORY_TOP_RATED) viewmodel.category =
-                        ApiResponse.Movie.CATEGORY_TOP_RATED
+                    if (category != MovieCategories.TopRated) viewmodel.category =
+                        MovieCategories.TopRated
                 }
                 R.id.item_favorites -> {
-                    if (category != ApiResponse.Movie.CATEGORY_FAVORITES) viewmodel.category =
-                        ApiResponse.Movie.CATEGORY_FAVORITES
+                    if (category != MovieCategories.Favorite) viewmodel.category =
+                        MovieCategories.Favorite
                 }
                 else -> {}
             }

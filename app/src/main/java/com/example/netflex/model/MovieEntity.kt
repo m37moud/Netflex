@@ -13,5 +13,6 @@ data class MovieEntity(
     val original_title: String,
     val vote_average: Double,
     val release_date: String,
-    val poster: Bitmap
+    val poster: Bitmap? = null,
+    val poster_path: String? = null
 )
