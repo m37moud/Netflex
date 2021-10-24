@@ -12,5 +12,11 @@ data class ApiResponse(
         val original_title: String,
         val vote_average: Double,
         val release_date: String
-    )
+    ){
+        companion object {
+            const val CATEGORY_POPULAR = 1
+            const val CATEGORY_TOP_RATED = 2
+            const val CATEGORY_FAVORITES = 3
+        }
+    }
 }
