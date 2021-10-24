@@ -1,20 +1,15 @@
 package com.example.netflex.fragment.viewmodel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.netflex.di.DaggerRetrofitComponent
-import com.example.netflex.di.RetrofitComponent
-import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.repository.MovieRepository
+import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.utils.MovieCategories
 
-class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel() according to db implementation
-{
-    companion object {
-        val daggerRetrofitComponent: RetrofitComponent = DaggerRetrofitComponent.builder().build()
-    }
-
+class MovieCollectionViewModel(app: Application): AndroidViewModel(app) {
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
@@ -50,4 +45,5 @@ class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel(
     private suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
         return movieRepository.fetchTopRatedMovies(page)
     }
+
 }

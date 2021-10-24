@@ -9,14 +9,17 @@ import com.example.netflex.R
 import com.example.netflex.adapter.MovieRecyclerAdapter
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
 import com.example.netflex.fragment.base.BaseFragment
+import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
 import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding>(
-    FragmentMovieCollectionBinding::inflate) {
+class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>(
+    FragmentMovieCollectionBinding::inflate,
+    MovieCollectionViewModel::class.java
+    ) {
     private lateinit var adapter: MovieRecyclerAdapter
     private lateinit var connectionLiveData: ConnectionLiveData
     private lateinit var popupMenu: PopupMenu

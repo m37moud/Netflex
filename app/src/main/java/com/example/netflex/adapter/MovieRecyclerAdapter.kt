@@ -19,7 +19,7 @@ class MovieRecyclerAdapter(
     class MovieViewHolder(val binding: RecyclerSampleItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private var data = listOf<MovieEntity>()
+    private var data = mutableListOf<MovieEntity>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -49,7 +49,6 @@ class MovieRecyclerAdapter(
         return data.size
     }
 
-    // used for filtering
     @SuppressLint("NotifyDataSetChanged") // data set is being changed completely
     fun setData(response: ApiResponse?, movies: MutableList<MovieEntity>){
         this.response = response

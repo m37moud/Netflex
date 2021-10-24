@@ -1,4 +1,4 @@
-package com.example.netflex.di
+package com.example.netflex.di.component
 
 import com.example.netflex.di.module.RetrofitModule
 import com.example.netflex.fragment.MovieCollectionFragment
@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [RetrofitModule::class])
-interface RetrofitComponent {
+interface AppComponent {
 
     fun getMovieApi(): MovieApi
 
