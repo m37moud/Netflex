@@ -1,6 +1,7 @@
 package com.example.netflex.fragment.viewmodel
 
 import androidx.lifecycle.ViewModel
+import javax.inject.Inject
 
-class SplashScreenViewModel: ViewModel() {
+class SplashScreenViewModel @Inject constructor(): ViewModel() {
 }

@@ -1,15 +1,15 @@
 package com.example.netflex.fragment.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.repository.MovieRepository
 import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.utils.MovieCategories
+import javax.inject.Inject
 
-class MovieCollectionViewModel(app: Application): AndroidViewModel(app) {
+class MovieCollectionViewModel @Inject constructor(): ViewModel() {
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
