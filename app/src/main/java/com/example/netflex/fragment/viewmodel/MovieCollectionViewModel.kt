@@ -1,21 +1,28 @@
 package com.example.netflex.fragment.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.netflex.app.MyApp
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
 
 class MovieCollectionViewModel(app: Application): ViewModel() {
+    init {
+        Log.d("netflexTest", app.toString())
+    }
 
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
             field = value
         }
+
+    val connectionLiveData = ConnectionLiveData(app.baseContext)
 
     private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
 

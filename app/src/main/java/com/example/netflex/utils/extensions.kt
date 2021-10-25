@@ -1,6 +1,7 @@
 package com.example.netflex.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -20,4 +21,16 @@ fun ImageView.loadImage(context: Context, uri: String) {
         .centerCrop()
         .placeholder(R.color.black)
         .into(this)
+}
+
+fun String.getImageAsBitmap(context: Context): Bitmap? {
+    return Glide.with(context)
+        .asBitmap()
+        .load(this)
+        .submit()
+        .get()
+}
+
+fun String.addPrefix(prefix: String): String {
+    return "$prefix$this"
 }

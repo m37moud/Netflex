@@ -12,7 +12,8 @@ import com.example.netflex.utils.loadImage
 
 class MovieRecyclerAdapter(
     private var response: ApiResponse?,
-    private val callBack: (page: Int) -> Unit
+    private val pagingCallBack: (page: Int) -> Unit,
+    private val onMovieClick: (movie: MovieEntity) -> Unit
 ) :
     RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
 
@@ -40,7 +41,11 @@ class MovieRecyclerAdapter(
         iv.loadImage(holder.itemView.context, uri)
 
         if (position == data.size - 1) {
-            callBack(response?.page!! + 1)
+            pagingCallBack(response?.page!! + 1)
+        }
+
+        holder.itemView.setOnClickListener {
+            onMovieClick(data[position])
         }
 
     }
