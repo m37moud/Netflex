@@ -6,12 +6,12 @@ import com.example.netflex.room_database.dao.MovieDao
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(private val movieDao: MovieDao,
-                                          private val movieApi: MovieApi) {
-    suspend fun fetchPopularMovies(page: Int): ApiResponse? {
+                                          private val movieApi: MovieApi): Repository {
+    override suspend fun fetchPopularMovies(page: Int): ApiResponse? {
         return movieApi.getPopularMovies(page)
     }
 
-    suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
+    override suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
         return movieApi.getTopRatedMovies(page)
     }
 

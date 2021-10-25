@@ -8,7 +8,7 @@ import com.example.netflex.room_database.dao.MovieDao
 import com.example.netflex.room_database.type_converters.PosterTypeConverters
 
 @TypeConverters(PosterTypeConverters::class)
-@Database(entities = [MovieEntity::class], version = 1, exportSchema = false) // TODO: Configure db to be singleton using di
+@Database(entities = [MovieEntity::class], version = 1, exportSchema = false)
 abstract class MovieDataBase: RoomDatabase() {
     abstract fun movieDao(): MovieDao
 }

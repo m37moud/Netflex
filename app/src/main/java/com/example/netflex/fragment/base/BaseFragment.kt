@@ -11,10 +11,10 @@ import androidx.viewbinding.ViewBinding
 import com.example.netflex.di.component.DaggerFragmentComponent
 import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
 
-abstract class BaseFragment<T, V: ViewModel>(
+abstract class BaseFragment<T, V : ViewModel>(
     private val inflate: (LayoutInflater, ViewGroup?, Boolean) -> T,
     private val VM: Class<V>
-): Fragment() {
+) : Fragment() {
     private lateinit var viewModelFactory: MovieViewModelFactory
 
     private var mBinding: T? = null
@@ -26,7 +26,7 @@ abstract class BaseFragment<T, V: ViewModel>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory =DaggerFragmentComponent
+        viewModelFactory = DaggerFragmentComponent
             .builder()
             .app(requireActivity().application)
             .build().getViewModelFactory()
