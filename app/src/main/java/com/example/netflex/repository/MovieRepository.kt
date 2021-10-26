@@ -1,16 +1,17 @@
 package com.example.netflex.repository
 
-import com.example.netflex.fragment.viewmodel.MoviesViewmodel
-import com.example.netflex.model.ApiResponse
+import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.retrofit.MovieApi
+import com.example.netflex.room_database.dao.MovieDao
+import javax.inject.Inject
 
-class MovieRepository {
-    private var movieApi = MoviesViewmodel.daggerRetrofitComponent.getMovieApi()
-
-    suspend fun fetchPopularMovies(page: Int): ApiResponse? {
+class MovieRepository @Inject constructor(private val movieDao: MovieDao,
+                                          private val movieApi: MovieApi): Repository {
+    override suspend fun fetchPopularMovies(page: Int): ApiResponse? {
         return movieApi.getPopularMovies(page)
     }
 
-    suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
+    override suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
         return movieApi.getTopRatedMovies(page)
     }
 

@@ -1,40 +1,40 @@
 package com.example.netflex.fragment.viewmodel
+
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.netflex.di.DaggerRetrofitComponent
-import com.example.netflex.di.RetrofitComponent
-import com.example.netflex.model.ApiResponse
-import com.example.netflex.repository.MovieRepository
+import com.example.netflex.app.MyApp
+import com.example.netflex.model.MovieEntity
+import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.utils.MovieCategories
 
-class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel() according to db implementation
-{
-    companion object {
-        val daggerRetrofitComponent: RetrofitComponent = DaggerRetrofitComponent.builder().build()
-    }
+class MovieCollectionViewModel(app: Application): ViewModel() {
 
-    var category = ApiResponse.Movie.CATEGORY_TOP_RATED
+    var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
             field = value
         }
 
-    private val movieRepository = MovieRepository()
+    private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
+
     private val _responseLiveData = MutableLiveData<ApiResponse>()
     val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
-    val movies = mutableListOf<ApiResponse.Movie>()
+    val movies = mutableListOf<MovieEntity>()
 
-    suspend fun addMoviesToRecyclerView(page: Int = 1){
+    suspend fun addMoviesToRecyclerView(page: Int = 1) {
         var response: ApiResponse? = null
 
-        when(category){
-            ApiResponse.Movie.CATEGORY_POPULAR -> {
+        when (category) {
+            MovieCategories.Popular -> {
                 response = fetchPopularMovies(page)
             }
-            ApiResponse.Movie.CATEGORY_TOP_RATED -> {
+            MovieCategories.TopRated -> {
                 response = fetchTopRatedMovies(page)
             }
-            ApiResponse.Movie.CATEGORY_FAVORITES -> {} // TODO: Configure later
+            MovieCategories.Favorite -> {
+            } // TODO: Configure later
         }
 
         _responseLiveData.value = response
@@ -48,4 +48,5 @@ class MoviesViewmodel: ViewModel() // TODO: maybe changed with AndroidViewModel(
     private suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
         return movieRepository.fetchTopRatedMovies(page)
     }
+
 }
