@@ -17,4 +17,7 @@ interface MovieDao {
 
     @Delete
     suspend fun deleteMovie(movieEntity: MovieEntity)
+
+    @Query("SELECT * FROM movies")
+    suspend fun fetchAllMovies(): MutableList<MovieEntity>
 }

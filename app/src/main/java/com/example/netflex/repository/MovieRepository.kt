@@ -30,4 +30,8 @@ class MovieRepository @Inject constructor(private val movieDao: MovieDao,
         movieDao.deleteMovie(movieEntity)
     }
 
+    override suspend fun fetchAllMovies(): MutableList<MovieEntity> {
+        return movieDao.fetchAllMovies()
+    }
+
 }

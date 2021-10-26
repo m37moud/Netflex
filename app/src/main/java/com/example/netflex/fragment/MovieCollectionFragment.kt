@@ -53,7 +53,6 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
         }
 
         popupMenu.setOnMenuItemClickListener {
-            if (!viewmodel.connectionLiveData.value!!) return@setOnMenuItemClickListener false
             val category = viewmodel.category
             when (it.itemId) {
                 R.id.item_popular -> {
@@ -77,11 +76,16 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
 
     private fun setObserver() {
         viewmodel.responseLiveData.observe(viewLifecycleOwner) {
-            (binding?.rvMovies?.adapter as MovieRecyclerAdapter).setData(it, viewmodel.movies)
+            if (viewmodel.category != MovieCategories.Favorite)
+                    (binding?.rvMovies?.adapter as MovieRecyclerAdapter).setData(it, viewmodel.movies)
         }
     }
 
     private fun initUI() {
+        if (viewmodel.category == MovieCategories.Favorite){
+            configureFavoriteMovies()
+            return
+        }
         if (viewmodel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
             adapter = MovieRecyclerAdapter(null, ::pagingCallback, ::onMovieClick)
             adapter.setData(viewmodel.responseLiveData.value, viewmodel.movies)
@@ -111,5 +115,14 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
     private fun onMovieClick(movie: MovieEntity){
         val action = MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(movie)
         findNavController().navigate(action)
+    }
+
+    private fun configureFavoriteMovies(){
+        lifecycleScope.launch {
+            adapter = MovieRecyclerAdapter(null, null, ::onMovieClick)
+            viewmodel.addMoviesToRecyclerView()
+            adapter.setData(null, viewmodel.movies)
+            binding?.rvMovies?.adapter = adapter
+        }
     }
 }

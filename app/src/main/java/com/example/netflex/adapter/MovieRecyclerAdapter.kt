@@ -1,6 +1,7 @@
 package com.example.netflex.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.example.netflex.utils.loadImage
 
 class MovieRecyclerAdapter(
     private var response: ApiResponse?,
-    private val pagingCallBack: (page: Int) -> Unit,
+    private val pagingCallBack: ((page: Int) -> Unit)?,
     private val onMovieClick: (movie: MovieEntity) -> Unit
 ) :
     RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
@@ -40,8 +41,9 @@ class MovieRecyclerAdapter(
         val uri = RetrofitConstants.IMAGE_BASE_URL + data[position].poster_path
         iv.loadImage(holder.itemView.context, uri)
 
-        if (position == data.size - 1) {
-            pagingCallBack(response?.page!! + 1)
+        if (position == data.size - 1 && pagingCallBack != null) {
+            Log.d("netflexTest", "paging nigga")
+            pagingCallBack!!(response?.page!! + 1)
         }
 
         holder.itemView.setOnClickListener {

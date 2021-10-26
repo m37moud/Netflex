@@ -36,7 +36,7 @@ class MovieDetailsFragment :
             isFavorite = viewmodel.isFavorite(movie.id)
             initUI()
         }
-        configureAddToFavorites()
+        configureFavButtonClickListener()
     }
 
     private fun initUI() {
@@ -47,12 +47,15 @@ class MovieDetailsFragment :
             this?.rating?.text = movie.vote_average.toString().addPrefix("Rating: ")
             this?.description?.text = movie.overview.addPrefix("Overview:\n")
             this?.releaseYear?.text = movie.release_date.addPrefix("Release date: ")
-            this?.ivPoster?.loadImage(requireContext(), movie.generateImageUrl())
+            if (movie.poster == null){
+                this?.ivPoster?.loadImage(requireContext(), movie.generateImageUrl())
+            }else this?.ivPoster?.setImageBitmap(movie.poster)
+
             if (isFavorite) this?.btnFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
     }
 
-    private fun configureAddToFavorites() {
+    private fun configureFavButtonClickListener() {
         binding?.btnFavorite?.setOnClickListener {
 
             lifecycleScope.launch {
@@ -62,27 +65,31 @@ class MovieDetailsFragment :
                     (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_border_24)
                     isFavorite = !isFavorite
                 } else {
-                    try {
-                        withContext(Dispatchers.IO) {
-                            movie.poster =
-                                movie.generateImageUrl().getImageAsBitmap(requireContext())
-                        }
-
-                        viewmodel.addToFavorites(movie)
-                        (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
-                        isFavorite = !isFavorite
-
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Couldn't Save Movie Try Again",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    addToFavorites()
                 }
                 it.isClickable = true
             }
 
+        }
+    }
+
+    private suspend fun addToFavorites(){
+        try {
+            withContext(Dispatchers.IO) {
+                movie.poster =
+                    movie.generateImageUrl().getImageAsBitmap(requireContext())
+            }
+
+            viewmodel.addToFavorites(movie)
+            binding?.btnFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
+            isFavorite = !isFavorite
+
+        } catch (e: Exception) {
+            Toast.makeText(
+                requireContext(),
+                "Couldn't Save Movie Try Again",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
