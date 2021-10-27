@@ -52,6 +52,10 @@ class MovieDetailsFragment :
             }else this?.ivPoster?.setImageBitmap(movie.poster)
 
             if (isFavorite) this?.btnFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
+
+            this?.btnBackNav?.setOnClickListener {
+                activity?.onBackPressed()
+            }
         }
     }
 

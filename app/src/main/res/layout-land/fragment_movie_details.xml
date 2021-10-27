@@ -94,6 +94,7 @@
         app:layout_constraintGuide_percent="0.5"/>
 
     <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_back_nav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"

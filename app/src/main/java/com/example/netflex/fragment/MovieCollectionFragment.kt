@@ -3,6 +3,7 @@ package com.example.netflex.fragment
 import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,8 @@ import com.example.netflex.databinding.FragmentMovieCollectionBinding
 import com.example.netflex.fragment.base.BaseFragment
 import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
 import com.example.netflex.model.MovieEntity
+import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.retrofit.Resource
 import com.example.netflex.utils.MovieCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,19 +79,27 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
 
     private fun setObserver() {
         viewmodel.responseLiveData.observe(viewLifecycleOwner) {
-            if (viewmodel.category != MovieCategories.Favorite)
-                    (binding?.rvMovies?.adapter as MovieRecyclerAdapter).setData(it, viewmodel.movies)
+            if (it is Resource.Error) {
+                Toast.makeText(requireContext(), it.msg, Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+            if (viewmodel.category != MovieCategories.Favorite) (binding?.rvMovies?.adapter as MovieRecyclerAdapter).setData(it.d, viewmodel.movies)
         }
     }
 
     private fun initUI() {
+        if (viewmodel.responseLiveData.value is Resource.Error)
+        {
+            Toast.makeText(requireContext(), (viewmodel.responseLiveData.value as Resource.Error<ApiResponse>).msg, Toast.LENGTH_SHORT).show()
+            return
+        }
         if (viewmodel.category == MovieCategories.Favorite){
             configureFavoriteMovies()
             return
         }
         if (viewmodel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
             adapter = MovieRecyclerAdapter(null, ::pagingCallback, ::onMovieClick)
-            adapter.setData(viewmodel.responseLiveData.value, viewmodel.movies)
+            adapter.setData(viewmodel.responseLiveData.value?.d, viewmodel.movies)
             binding?.rvMovies?.adapter = adapter
             return
         }

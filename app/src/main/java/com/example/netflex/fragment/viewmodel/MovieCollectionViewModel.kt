@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.example.netflex.app.MyApp
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.retrofit.ApiResponse
+import com.example.netflex.retrofit.Resource
 import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
+import java.lang.Exception
 
 class MovieCollectionViewModel(app: Application): ViewModel() {
 
@@ -22,27 +24,38 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
 
     private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
 
-    private val _responseLiveData = MutableLiveData<ApiResponse>()
-    val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
+    private val _responseLiveData = MutableLiveData<Resource<ApiResponse>>()
+    val responseLiveData: LiveData<Resource<ApiResponse>> get() = _responseLiveData
     var movies = mutableListOf<MovieEntity>()
 
     suspend fun addMoviesToRecyclerView(page: Int = 1) {
-        val response: ApiResponse?
-
         when (category) {
             MovieCategories.Popular -> {
-                response = fetchPopularMovies(page)
-                movies.addAll(response?.results!!)
-                _responseLiveData.value = response
+                val res = getResult(::fetchPopularMovies, page)
+                if (res is Resource.Success){
+                    movies.addAll(res.data?.results!!)
+                }
+                _responseLiveData.value = res
             }
             MovieCategories.TopRated -> {
-                response = fetchTopRatedMovies(page)
-                movies.addAll(response?.results!!)
-                _responseLiveData.value = response
+                val res = getResult(::fetchTopRatedMovies, page)
+                if (res is Resource.Success){
+                    movies.addAll(res.data?.results!!)
+                }
+                _responseLiveData.value = res
             }
             MovieCategories.Favorite -> {
                 movies = movieRepository.fetchAllMovies()
             }
+        }
+    }
+
+    private suspend fun getResult(gerRes: suspend (Int) -> ApiResponse?, page: Int): Resource<ApiResponse>{
+        return try {
+            val response = gerRes(page)
+            Resource.Success(response)
+        }catch (e: Exception){
+            Resource.Error(msg=e.message)
         }
     }
 
