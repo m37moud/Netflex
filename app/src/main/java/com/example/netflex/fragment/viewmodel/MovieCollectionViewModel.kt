@@ -12,9 +12,7 @@ import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
 
 class MovieCollectionViewModel(app: Application): ViewModel() {
-    init {
-        Log.d("netflexTest", app.toString())
-    }
+    var observed = false
 
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {

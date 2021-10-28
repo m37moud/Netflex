@@ -27,13 +27,12 @@ class MovieDetailsFragment :
     ) {
     private val args: MovieDetailsFragmentArgs by navArgs()
     private lateinit var movie: MovieEntity
-    private var isFavorite = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movie = args.clickedMovie
         lifecycleScope.launch {
-            isFavorite = viewmodel.isFavorite(movie.id)
+            viewmodel.isFavorite = viewmodel.isFavorite(movie.id)
             initUI()
         }
         configureAddToFavorites()
@@ -48,7 +47,7 @@ class MovieDetailsFragment :
             this?.description?.text = movie.overview.addPrefix("Overview:\n")
             this?.releaseYear?.text = movie.release_date.addPrefix("Release date: ")
             this?.ivPoster?.loadImage(requireContext(), movie.generateImageUrl())
-            if (isFavorite) this?.btnFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
+            if (viewmodel.isFavorite) this?.btnFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
     }
 
@@ -57,10 +56,10 @@ class MovieDetailsFragment :
 
             lifecycleScope.launch {
                 it.isClickable = false
-                if (isFavorite) {
+                if (viewmodel.isFavorite) {
                     viewmodel.deleteFromFavorites(movie)
                     (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    isFavorite = !isFavorite
+                    viewmodel.isFavorite = !viewmodel.isFavorite
                 } else {
                     try {
                         withContext(Dispatchers.IO) {
@@ -70,7 +69,7 @@ class MovieDetailsFragment :
 
                         viewmodel.addToFavorites(movie)
                         (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
-                        isFavorite = !isFavorite
+                        viewmodel.isFavorite = !viewmodel.isFavorite
 
                     } catch (e: Exception) {
                         Toast.makeText(

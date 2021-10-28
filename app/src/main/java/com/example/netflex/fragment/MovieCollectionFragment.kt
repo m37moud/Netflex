@@ -33,15 +33,8 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
     private fun configureConnectivity() {
         viewmodel.connectionLiveData.observe(requireActivity()) {
             binding?.connectionLostLabel?.isVisible = !it
-            if ((it && binding?.rvMovies?.adapter == null) || (!it && binding?.rvMovies?.adapter == null && viewmodel.movies.isNotEmpty())) {
-                // if connection restored which was lost from the oppening of the app
-                // if connection was lost while browsing we don't want to call init function
-                // if we rotated screen while offline
-                initUI()
-                setObserver()
-            }else{
-                initUI()
-            }
+            if (binding?.rvMovies?.adapter == null) initUI()
+            if (!viewmodel.observed) setObserver()
         }
     }
 
@@ -76,7 +69,8 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
     }
 
     private fun setObserver() {
-        viewmodel.responseLiveData.observe(viewLifecycleOwner) {
+        viewmodel.observed = true
+        viewmodel.responseLiveData.observe(requireActivity()) {
             (binding?.rvMovies?.adapter as MovieRecyclerAdapter).setData(it, viewmodel.movies)
         }
     }
