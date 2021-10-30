@@ -1,7 +1,7 @@
 package com.example.netflex.fragment
 
-import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -17,49 +17,51 @@ import com.example.netflex.utils.loadImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class MovieDetailsFragment :
-    BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>
-        (
-        FragmentMovieDetailsBinding::inflate,
-        MovieDetailsViewModel::class.java
-    ) {
+    BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private lateinit var movie: MovieEntity
+    private val movie: MovieEntity = args.clickedMovie
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        movie = args.clickedMovie
+    override lateinit var binding: FragmentMovieDetailsBinding
+    override lateinit var viewModel: MovieDetailsViewModel
+    override val viewModelClass: Class<MovieDetailsViewModel>
+        get() = MovieDetailsViewModel::class.java
+
+    override fun initView(binding: FragmentMovieDetailsBinding) {
+        this.binding = binding
         lifecycleScope.launch {
-            viewmodel.isFavorite = viewmodel.isFavorite(movie.id)
+            viewModel.isFavorite = viewModel.isFavorite(movie.id)
             initUI()
         }
         configureAddToFavorites()
     }
 
+    override fun onBindViewModel(viewModel: MovieDetailsViewModel) {
+        this.viewModel = viewModel
+    }
+
     private fun initUI() {
-        if (binding == null) return
         with(binding) {
-            this?.title?.text = movie.title
-            this?.originalTitle?.text = movie.original_title.addPrefix("Original title: ")
-            this?.rating?.text = movie.vote_average.toString().addPrefix("Rating: ")
-            this?.description?.text = movie.overview.addPrefix("Overview:\n")
-            this?.releaseYear?.text = movie.release_date.addPrefix("Release date: ")
-            this?.ivPoster?.loadImage(requireContext(), movie.generateImageUrl())
-            if (viewmodel.isFavorite) this?.btnFavorite?.setImageResource(R.drawable.ic_baseline_favorite_24)
+            title.text = movie.title
+            originalTitle.text = movie.original_title.addPrefix("Original title: ")
+            rating.text = movie.vote_average.toString().addPrefix("Rating: ")
+            description.text = movie.overview.addPrefix("Overview:\n")
+            releaseYear.text = movie.release_date.addPrefix("Release date: ")
+            ivPoster.loadImage(requireContext(), movie.generateImageUrl())
+            if (viewModel.isFavorite) this.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
     }
 
     private fun configureAddToFavorites() {
-        binding?.btnFavorite?.setOnClickListener {
+        binding.btnFavorite.setOnClickListener {
 
             lifecycleScope.launch {
                 it.isClickable = false
-                if (viewmodel.isFavorite) {
-                    viewmodel.deleteFromFavorites(movie)
+                if (viewModel.isFavorite) {
+                    viewModel.deleteFromFavorites(movie)
                     (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    viewmodel.isFavorite = !viewmodel.isFavorite
+                    viewModel.isFavorite = !viewModel.isFavorite
                 } else {
                     try {
                         withContext(Dispatchers.IO) {
@@ -67,9 +69,9 @@ class MovieDetailsFragment :
                                 movie.generateImageUrl().getImageAsBitmap(requireContext())
                         }
 
-                        viewmodel.addToFavorites(movie)
+                        viewModel.addToFavorites(movie)
                         (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
-                        viewmodel.isFavorite = !viewmodel.isFavorite
+                        viewModel.isFavorite = !viewModel.isFavorite
 
                     } catch (e: Exception) {
                         Toast.makeText(
@@ -84,5 +86,11 @@ class MovieDetailsFragment :
 
         }
     }
+
+    override fun inflate(
+        layoutInflater: LayoutInflater,
+        viewGroup: ViewGroup?,
+        attachToRoot: Boolean
+    ): FragmentMovieDetailsBinding = FragmentMovieDetailsBinding.inflate(layoutInflater, viewGroup, attachToRoot)
 
 }
