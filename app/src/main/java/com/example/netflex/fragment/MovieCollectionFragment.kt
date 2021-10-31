@@ -125,6 +125,5 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
         layoutInflater: LayoutInflater,
         viewGroup: ViewGroup?,
         attachToRoot: Boolean
-    ): FragmentMovieCollectionBinding =
-        FragmentMovieCollectionBinding.inflate(layoutInflater, viewGroup, attachToRoot)
+    ) = FragmentMovieCollectionBinding.inflate(layoutInflater, viewGroup, attachToRoot)
 }

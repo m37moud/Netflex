@@ -91,6 +91,6 @@ class MovieDetailsFragment :
         layoutInflater: LayoutInflater,
         viewGroup: ViewGroup?,
         attachToRoot: Boolean
-    ): FragmentMovieDetailsBinding = FragmentMovieDetailsBinding.inflate(layoutInflater, viewGroup, attachToRoot)
+    ) = FragmentMovieDetailsBinding.inflate(layoutInflater, viewGroup, attachToRoot)
 
 }

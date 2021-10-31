@@ -40,7 +40,7 @@ class SplashScreenFragment: BaseFragment<FragmentSplashScreenBinding, SplashScre
         layoutInflater: LayoutInflater,
         viewGroup: ViewGroup?,
         attachToRoot: Boolean
-    ): FragmentSplashScreenBinding = FragmentSplashScreenBinding.inflate(layoutInflater, viewGroup, attachToRoot)
+    ) = FragmentSplashScreenBinding.inflate(layoutInflater, viewGroup, attachToRoot)
 
     companion object{
         private const val NEXT_PAGE_DELAY = 3000L
