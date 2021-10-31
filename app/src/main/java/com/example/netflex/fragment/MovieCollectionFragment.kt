@@ -23,17 +23,15 @@ class MovieCollectionFragment :
     override val viewModelClass: Class<MovieCollectionViewModel>
         get() = MovieCollectionViewModel::class.java
 
-    private lateinit var adapter: MovieRecyclerAdapter
     private lateinit var popupMenu: PopupMenu
     override lateinit var binding: FragmentMovieCollectionBinding
     override lateinit var viewModel: MovieCollectionViewModel
 
-
     override fun initView(binding: FragmentMovieCollectionBinding) {
         // onCreateView
         this.binding = binding
-        configureConnectivity()
         configurePopupMenu()
+        configureConnectivity()
     }
 
     override fun onBindViewModel(viewModel: MovieCollectionViewModel) {
@@ -45,7 +43,7 @@ class MovieCollectionFragment :
     private fun configureConnectivity() {
         viewModel.connectionLiveData.observe(viewLifecycleOwner) {
             binding.connectionLostLabel.isVisible = !it
-            if (binding.rvMovies.adapter == null) initRecyclerView()
+            initRecyclerView()
         }
     }
 
@@ -57,7 +55,6 @@ class MovieCollectionFragment :
         }
 
         popupMenu.setOnMenuItemClickListener {
-            if (!viewModel.connectionLiveData.value!!) return@setOnMenuItemClickListener false
             val category = viewModel.category
             when (it.itemId) {
                 R.id.item_popular -> {
@@ -88,24 +85,20 @@ class MovieCollectionFragment :
 
     private fun initRecyclerView() {
         if (viewModel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
-            adapter = MovieRecyclerAdapter(::pagingCallback, ::onMovieClick)
-            adapter.setData(viewModel.movies)
-            binding.rvMovies.adapter = adapter
+            setRecyclerAdapter().setData(viewModel.movies)
             return
         }
-        if (!viewModel.connectionLiveData.value!!) return
-        adapter = MovieRecyclerAdapter(::pagingCallback, ::onMovieClick)
-        binding.rvMovies.adapter = adapter
-
-        lifecycleScope.launch(Dispatchers.Main) {
-            binding.progressImages.isVisible = true
-            viewModel.addMoviesToRecyclerView()
-            binding.progressImages.isVisible = false
-        }
+        setRecyclerAdapter()
+        loadContentToViewModel()
     }
 
-    private fun pagingCallback() {
-        if (!viewModel.connectionLiveData.value!!) return
+    private fun setRecyclerAdapter(): MovieRecyclerAdapter {
+        val adapter = MovieRecyclerAdapter(::loadContentToViewModel, ::onMovieClick)
+        binding.rvMovies.adapter = adapter
+        return adapter
+    }
+
+    private fun loadContentToViewModel(){
         lifecycleScope.launch(Dispatchers.Main) {
             binding.progressImages.isVisible = true
             viewModel.addMoviesToRecyclerView()

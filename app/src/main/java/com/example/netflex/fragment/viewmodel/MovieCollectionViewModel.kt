@@ -11,6 +11,7 @@ import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
 
 class MovieCollectionViewModel(app: Application): ViewModel() {
+
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
@@ -26,6 +27,7 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
     val movies = mutableListOf<MovieEntity>()
 
     suspend fun addMoviesToRecyclerView() {
+        if (connectionLiveData.value == false) return
         var response: ApiResponse? = null
         val page = _responseLiveData.value?.page?:0
 
