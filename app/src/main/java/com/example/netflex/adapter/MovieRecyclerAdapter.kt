@@ -5,20 +5,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netflex.databinding.RecyclerSampleItemBinding
-import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.model.MovieEntity
-import com.example.netflex.utils.RetrofitConstants
 import com.example.netflex.utils.loadImage
 
 class MovieRecyclerAdapter(
-    private var response: ApiResponse?,
-    private val pagingCallBack: (page: Int) -> Unit,
+    private val pagingCallBack: () -> Unit,
     private val onMovieClick: (movie: MovieEntity) -> Unit
 ) :
     RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
 
-    class MovieViewHolder(val binding: RecyclerSampleItemBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class MovieViewHolder(binding: RecyclerSampleItemBinding) :
+        RecyclerView.ViewHolder(binding.root){
+            val poster = binding.ivPoster
+        }
 
     private var data = mutableListOf<MovieEntity>()
 
@@ -36,27 +35,17 @@ class MovieRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val iv = holder.binding.ivPoster
-        val uri = RetrofitConstants.IMAGE_BASE_URL + data[position].poster_path
-        iv.loadImage(holder.itemView.context, uri)
-
-        if (position == data.size - 1) {
-            pagingCallBack(response?.page!! + 1)
-        }
-
-        holder.itemView.setOnClickListener {
-            onMovieClick(data[position])
-        }
-
+        holder.poster.loadImage(holder.itemView.context, data[position].generateImageUrl())
+        if (position == data.size - 1) pagingCallBack()
+        holder.itemView.setOnClickListener { onMovieClick(data[position]) }
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    @SuppressLint("NotifyDataSetChanged") // data set is being changed completely
-    fun setData(response: ApiResponse?, movies: MutableList<MovieEntity>){
-        this.response = response
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(movies: MutableList<MovieEntity>){
         this.data = movies
         notifyDataSetChanged()
     }

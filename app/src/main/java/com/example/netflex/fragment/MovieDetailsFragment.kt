@@ -21,7 +21,8 @@ import kotlinx.coroutines.withContext
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private val movie: MovieEntity = args.clickedMovie
+    private val movie: MovieEntity
+        get() = args.clickedMovie
 
     override lateinit var binding: FragmentMovieDetailsBinding
     override lateinit var viewModel: MovieDetailsViewModel
