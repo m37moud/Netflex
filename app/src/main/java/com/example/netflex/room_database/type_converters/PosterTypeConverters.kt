@@ -9,7 +9,6 @@ class PosterTypeConverters {
     @TypeConverter
     fun toBitmap(bytes: ByteArray): Bitmap = bytes.toBitmap()
 
-
     @TypeConverter
     fun fromBitmap(bmp: Bitmap): ByteArray = bmp.toByteArray()
 }

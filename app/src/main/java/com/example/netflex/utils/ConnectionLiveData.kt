@@ -7,6 +7,8 @@ import android.net.Network
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
+import java.lang.Exception
+import java.net.URL
 
 class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
 
@@ -38,8 +40,13 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
             val networkCapabilities = cm.getNetworkCapabilities(network)
             val hasInternetCapability = networkCapabilities?.hasCapability(NET_CAPABILITY_INTERNET)
             if (hasInternetCapability == true) {
-                validNetworks.add(network)
-                checkValidNetworks()
+                try {
+                    network.openConnection(URL(RetrofitConstants.BASE_URL)).connect()
+                    validNetworks.add(network)
+                    checkValidNetworks()
+                }catch (e: Exception){
+                    checkValidNetworks()
+                }
             }
         }
 

@@ -25,6 +25,14 @@ fun ImageView.loadImage(context: Context, uri: String) {
         .into(this)
 }
 
+fun String.getImageAsBitmap(context: Context): Bitmap? {
+    return Glide.with(context)
+        .asBitmap()
+        .load(this)
+        .submit()
+        .get()
+}
+
 fun Bitmap.toByteArray(): ByteArray {
     val outputStream = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
@@ -32,3 +40,7 @@ fun Bitmap.toByteArray(): ByteArray {
 }
 
 fun ByteArray.toBitmap() = BitmapFactory.decodeByteArray(this, 0, this.size)!!
+
+fun String.addPrefix(prefix: String): String {
+    return "$prefix$this"
+}

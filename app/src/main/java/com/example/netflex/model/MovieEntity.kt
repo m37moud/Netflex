@@ -4,19 +4,20 @@ import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.netflex.utils.RetrofitConstants
+import java.io.Serializable
 
 @Entity(tableName = "movies")
 data class MovieEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String,
     val overview: String,
     val original_title: String,
     val vote_average: Double,
     val release_date: String,
-    val poster: Bitmap? = null,
+    var poster: Bitmap? = null,
     val poster_path: String? = null
-){
+): Serializable{
     fun generateImageUrl(): String{
         return RetrofitConstants.IMAGE_BASE_URL + poster_path
     }

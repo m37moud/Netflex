@@ -33,8 +33,8 @@ class ViewModelModule {
     @Provides
     @IntoMap
     @ViewModelKey(MovieDetailsViewModel::class)
-    fun detailsViewmodel(): ViewModel{
-        return MovieDetailsViewModel()
+    fun detailsViewmodel(app: Application): ViewModel{
+        return MovieDetailsViewModel(app)
     }
 
     @Provides
