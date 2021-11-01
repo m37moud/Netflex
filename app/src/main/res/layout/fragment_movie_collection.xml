@@ -25,8 +25,6 @@
         android:id="@+id/rv_movies"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:spanCount="2"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/appname"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

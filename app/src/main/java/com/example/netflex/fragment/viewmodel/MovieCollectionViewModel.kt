@@ -27,7 +27,7 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
     val movies = mutableListOf<MovieEntity>()
 
     suspend fun addMoviesToRecyclerView() {
-        if (connectionLiveData.value == false) return
+        if (connectionLiveData.value == false || connectionLiveData.value == null) return
         var response: ApiResponse? = null
         val page = _responseLiveData.value?.page?:0
 

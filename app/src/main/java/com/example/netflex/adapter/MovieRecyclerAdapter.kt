@@ -9,7 +9,6 @@ import com.example.netflex.model.MovieEntity
 import com.example.netflex.utils.loadImage
 
 class MovieRecyclerAdapter(
-    private val pagingCallBack: () -> Unit,
     private val onMovieClick: (movie: MovieEntity) -> Unit
 ) :
     RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
@@ -36,7 +35,6 @@ class MovieRecyclerAdapter(
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.poster.loadImage(holder.itemView.context, data[position].generateImageUrl())
-        if (position == data.size - 1) pagingCallBack()
         holder.itemView.setOnClickListener { onMovieClick(data[position]) }
     }
 
