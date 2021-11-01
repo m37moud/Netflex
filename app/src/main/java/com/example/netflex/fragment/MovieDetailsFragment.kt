@@ -82,10 +82,6 @@ class MovieDetailsFragment :
         }
     }
 
-    override fun inflate(
-        layoutInflater: LayoutInflater,
-        viewGroup: ViewGroup?,
-        attachToRoot: Boolean
-    ): FragmentMovieDetailsBinding = FragmentMovieDetailsBinding.inflate(layoutInflater, viewGroup, attachToRoot)
-
+    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieDetailsBinding
+        get() = FragmentMovieDetailsBinding::inflate
 }

@@ -41,12 +41,8 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, SplashScr
         }
     }
 
-    override fun inflate(
-        layoutInflater: LayoutInflater,
-        viewGroup: ViewGroup?,
-        attachToRoot: Boolean
-    ): FragmentSplashScreenBinding =
-        FragmentSplashScreenBinding.inflate(layoutInflater, viewGroup, attachToRoot)
+    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentSplashScreenBinding
+        get() = FragmentSplashScreenBinding::inflate
 
     companion object {
         private const val NEXT_PAGE_DELAY = 3000L

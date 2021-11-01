@@ -17,7 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>() {
+class MovieCollectionFragment :
+    BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>() {
 
     override val viewModelClass: Class<MovieCollectionViewModel>
         get() = MovieCollectionViewModel::class.java
@@ -27,7 +28,6 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
     override lateinit var viewModel: MovieCollectionViewModel
 
     override fun onBindViewModel(viewModel: MovieCollectionViewModel) {
-        // onCreate
         this.viewModel = viewModel
         configureConnectivity()
         configurePopupMenu()
@@ -114,10 +114,6 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
         findNavController().navigate(action)
     }
 
-    override fun inflate(
-        layoutInflater: LayoutInflater,
-        viewGroup: ViewGroup?,
-        attachToRoot: Boolean
-    ): FragmentMovieCollectionBinding =
-        FragmentMovieCollectionBinding.inflate(layoutInflater, viewGroup, attachToRoot)
+    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieCollectionBinding
+        get() = FragmentMovieCollectionBinding::inflate
 }
