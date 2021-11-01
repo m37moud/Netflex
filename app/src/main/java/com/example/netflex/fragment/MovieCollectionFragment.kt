@@ -29,6 +29,7 @@ class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, Mov
 
 
     override fun initView(binding: FragmentMovieCollectionBinding) {
+        // მხოლოდ ბეიზ ფრაგმენტს შევეხე ამ კოდს გავასუფთავებ შემდეგ ფულ რექვესთში
         // onCreateView
         this.binding = binding
         configureConnectivity()
