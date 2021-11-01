@@ -79,7 +79,7 @@ class MovieCollectionFragment :
 
     private fun setObserver() {
         viewModel.responseLiveData.observe(requireActivity()) {
-            (binding.rvMovies.adapter as MovieRecyclerAdapter).setData(viewModel.movies)
+            (binding.rvMovies.adapter as MovieRecyclerAdapter?)?.setData(viewModel.movies)
         }
     }
 
