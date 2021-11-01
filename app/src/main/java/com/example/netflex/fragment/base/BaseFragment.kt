@@ -12,7 +12,10 @@ import com.example.netflex.di.component.DaggerFragmentComponent
 import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
 
 abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
+    abstract val viewModelClass: Class<VM>
+    abstract val viewModel: VM
 
+    protected val binding: VB get() = mBinding!!
     private lateinit var viewModelFactory: MovieViewModelFactory
     private var mBinding: VB? = null
     private lateinit var viewmodel: VM
@@ -24,7 +27,6 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
             .app(requireActivity().application)
             .build().getViewModelFactory()
         viewmodel = ViewModelProvider(this, viewModelFactory).get(viewModelClass)
-        onBindViewModel(viewmodel)
     }
 
     override fun onCreateView(
@@ -33,8 +35,12 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = inflate(inflater, container, false)
-        initView(mBinding!!)
         return mBinding!!.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onBindViewModel(viewmodel)
     }
 
     override fun onDestroyView() {
@@ -44,13 +50,5 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
 
     abstract fun inflate(layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean): VB
 
-    abstract fun initView(binding: VB)
-
     abstract fun onBindViewModel(viewModel: VM)
-
-    abstract val binding: VB
-
-    abstract val viewModelClass: Class<VM>
-
-    abstract val viewModel: VM
 }
