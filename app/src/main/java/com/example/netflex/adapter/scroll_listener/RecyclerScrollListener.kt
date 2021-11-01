@@ -15,10 +15,7 @@ class RecyclerScrollListener(
         oldScrollX: Int,
         oldScrollY: Int
     ) {
-        val visibleItems = manager.childCount
-        val totalItems = manager.itemCount
-        val firstVisible = manager.findFirstVisibleItemPosition()
-        if (firstVisible + visibleItems >= totalItems){
+        if (manager.findFirstVisibleItemPosition() + manager.childCount >= manager.itemCount){
             callback()
         }
     }
