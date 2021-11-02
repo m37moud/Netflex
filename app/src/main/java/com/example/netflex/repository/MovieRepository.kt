@@ -14,20 +14,12 @@ class MovieRepository @Inject constructor(private val movieDao: MovieDao,
         return movieApi.getPopularMovies(page)
     }
 
-    override suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
-        return movieApi.getTopRatedMovies(page)
-    }
+    override suspend fun fetchTopRatedMovies(page: Int) = movieApi.getTopRatedMovies(page)
 
-    override suspend fun findMovieById(id: Int): MovieEntity? {
-        return movieDao.findMovieById(id)
-    }
+    override suspend fun findMovieById(id: Int) = movieDao.findMovieById(id)
 
-    override suspend fun insertMovieToDb(movieEntity: MovieEntity) {
-        movieDao.insertMovie(movieEntity)
-    }
+    override suspend fun insertMovieToDb(movieEntity: MovieEntity) = movieDao.insertMovie(movieEntity)
 
-    override suspend fun deleteMovie(movieEntity: MovieEntity) {
-        movieDao.deleteMovie(movieEntity)
-    }
+    override suspend fun deleteMovie(movieEntity: MovieEntity) = movieDao.deleteMovie(movieEntity)
 
 }
