@@ -51,24 +51,13 @@ class MovieCollectionFragment :
         binding.ibFilter.setOnClickListener {
             popupMenu.show()
         }
-
         popupMenu.setOnMenuItemClickListener {
             val category = viewModel.category
             when (it.itemId) {
-                R.id.item_popular -> {
-                    if (category != MovieCategories.Popular) viewModel.category =
-                        MovieCategories.Popular
-                }
-                R.id.item_top_rated -> {
-                    if (category != MovieCategories.TopRated) viewModel.category =
-                        MovieCategories.TopRated
-                }
-                R.id.item_favorites -> {
-                    if (category != MovieCategories.Favorite) viewModel.category =
-                        MovieCategories.Favorite
-                }
-                else -> {
-                }
+                R.id.item_popular -> if (category != MovieCategories.Popular) viewModel.category = MovieCategories.Popular
+                R.id.item_top_rated -> if (category != MovieCategories.TopRated) viewModel.category = MovieCategories.TopRated
+                R.id.item_favorites -> if (category != MovieCategories.Favorite) viewModel.category = MovieCategories.Favorite
+                else -> {}
             }
             setRecyclerData()
             return@setOnMenuItemClickListener false
