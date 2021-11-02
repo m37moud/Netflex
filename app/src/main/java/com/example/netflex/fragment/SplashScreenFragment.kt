@@ -19,7 +19,7 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, SplashScr
 
     override fun onBindViewModel(viewModel: SplashScreenViewModel) {
         this.viewModel = viewModel
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             delay(BEFORE_ANIM_DELAY)
 
             with(binding) {

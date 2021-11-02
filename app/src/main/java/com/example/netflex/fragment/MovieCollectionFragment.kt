@@ -16,6 +16,7 @@ import com.example.netflex.fragment.base.BaseFragment
 import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.utils.MovieCategories
+import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -38,7 +39,7 @@ class MovieCollectionFragment :
     }
 
     private fun configureConnectivity() {
-        viewModel.connectionLiveData.observe(this) {
+        setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
             setRecyclerData()
         }
@@ -75,7 +76,7 @@ class MovieCollectionFragment :
     }
 
     private fun setObserver() {
-        viewModel.responseLiveData.observe(this) {
+       setLifecycleObserver(viewModel.responseLiveData) {
             setRecyclerData()
         }
     }
@@ -107,7 +108,7 @@ class MovieCollectionFragment :
     }
 
     private fun loadContentToViewModel(){
-        lifecycleScope.launch(Dispatchers.Main) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.progressImages.isVisible = true
             viewModel.addMoviesToRecyclerView()
             binding.progressImages.isVisible = false
