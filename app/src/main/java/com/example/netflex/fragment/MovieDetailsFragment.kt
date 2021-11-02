@@ -21,25 +21,19 @@ import kotlinx.coroutines.withContext
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private val movie: MovieEntity
-        get() = args.clickedMovie
+    private val movie: MovieEntity = args.clickedMovie
 
-    override lateinit var binding: FragmentMovieDetailsBinding
     override lateinit var viewModel: MovieDetailsViewModel
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
-    override fun initView(binding: FragmentMovieDetailsBinding) {
-        this.binding = binding
+    override fun onBindViewModel(viewModel: MovieDetailsViewModel) {
+        this.viewModel = viewModel
         lifecycleScope.launch {
             viewModel.isFavorite = viewModel.isFavorite(movie.id)
             initUI()
         }
         configureAddToFavorites()
-    }
-
-    override fun onBindViewModel(viewModel: MovieDetailsViewModel) {
-        this.viewModel = viewModel
     }
 
     private fun initUI() {
@@ -88,10 +82,6 @@ class MovieDetailsFragment :
         }
     }
 
-    override fun inflate(
-        layoutInflater: LayoutInflater,
-        viewGroup: ViewGroup?,
-        attachToRoot: Boolean
-    ) = FragmentMovieDetailsBinding.inflate(layoutInflater, viewGroup, attachToRoot)
-
+    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieDetailsBinding
+        get() = FragmentMovieDetailsBinding::inflate
 }
