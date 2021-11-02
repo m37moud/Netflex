@@ -7,6 +7,7 @@ class RecyclerScrollListener(
     private val manager: GridLayoutManager,
     private val callback: () -> Unit
 ): View.OnScrollChangeListener {
+    private var previousDataCount = manager.itemCount
 
     override fun onScrollChange(
         v: View?,
@@ -15,8 +16,10 @@ class RecyclerScrollListener(
         oldScrollX: Int,
         oldScrollY: Int
     ) {
-        if (manager.findFirstVisibleItemPosition() + manager.childCount >= manager.itemCount){
+        if (manager.findFirstVisibleItemPosition() + manager.childCount >= manager.itemCount
+            && previousDataCount != manager.itemCount){
             callback()
+            previousDataCount = manager.itemCount
         }
     }
 }
