@@ -11,12 +11,9 @@ import com.example.netflex.databinding.FragmentMovieDetailsBinding
 import com.example.netflex.fragment.base.BaseFragment
 import com.example.netflex.fragment.viewmodel.MovieDetailsViewModel
 import com.example.netflex.model.MovieEntity
-import com.example.netflex.utils.addPrefix
-import com.example.netflex.utils.getImageAsBitmap
 import com.example.netflex.utils.loadImage
-import kotlinx.coroutines.Dispatchers
+import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
@@ -30,6 +27,7 @@ class MovieDetailsFragment :
 
     override fun onBindViewModel(viewModel: MovieDetailsViewModel) {
         this.viewModel = viewModel
+        viewModel.movieEntity = movie
         lifecycleScope.launch {
             viewModel.isFavorite = viewModel.isFavorite(movie.id)
             initUI()
@@ -38,21 +36,22 @@ class MovieDetailsFragment :
     }
 
     private fun initUI() {
-        with(binding) {
-            title.text = movie.title
-            originalTitle.text = movie.original_title.addPrefix("Original title: ")
-            rating.text = movie.vote_average.toString().addPrefix("Rating: ")
-            description.text = movie.overview.addPrefix("Overview:\n")
-            releaseYear.text = movie.release_date.addPrefix("Release date: ")
-            ivPoster.loadImage(requireContext(), movie.generateImageUrl())
-            if (viewModel.isFavorite) this.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        setLifecycleObserver(viewModel.movieLiveData){
+            with(binding) {
+                title.text = it.title
+                originalTitle.text = it.original_title
+                rating.text = it.vote_average.toString()
+                description.text = it.overview
+                releaseYear.text = it.release_date
+                ivPoster.loadImage(requireContext(), it.generateImageUrl())
+                if (viewModel.isFavorite) btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            }
         }
     }
 
     private fun configureAddToFavorites() {
         binding.btnFavorite.setOnClickListener {
-
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 it.isClickable = false
                 if (viewModel.isFavorite) {
                     viewModel.deleteFromFavorites(movie)
@@ -60,26 +59,16 @@ class MovieDetailsFragment :
                     viewModel.isFavorite = !viewModel.isFavorite
                 } else {
                     try {
-                        withContext(Dispatchers.IO) {
-                            movie.poster =
-                                movie.generateImageUrl().getImageAsBitmap(requireContext())
-                        }
-
                         viewModel.addToFavorites(movie)
                         (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
                         viewModel.isFavorite = !viewModel.isFavorite
 
                     } catch (e: Exception) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Couldn't Save Movie Try Again",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(requireContext(), "Couldn't Save Movie Try Again", Toast.LENGTH_SHORT).show()
                     }
                 }
                 it.isClickable = true
             }
-
         }
     }
 
