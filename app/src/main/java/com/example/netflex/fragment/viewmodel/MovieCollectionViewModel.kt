@@ -15,6 +15,7 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
             movies.clear()
+            _responseLiveData.value = null
             field = value
         }
 
@@ -22,8 +23,8 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
 
     private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
 
-    private val _responseLiveData = MutableLiveData<ApiResponse>()
-    val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
+    private val _responseLiveData = MutableLiveData<ApiResponse?>()
+    val responseLiveData: LiveData<ApiResponse?> get() = _responseLiveData
     val movies = mutableListOf<MovieEntity>()
 
     suspend fun addMoviesToRecyclerView() {

@@ -82,12 +82,11 @@ class MovieCollectionFragment :
     }
 
     private fun initRecyclerView() {
-        if (viewModel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
-            setRecyclerAdapter().setData(viewModel.movies)
-            return
+        if (viewModel.movies.size != 0) setRecyclerAdapter().setData(viewModel.movies)// used to restore state after rotating screen or changing fragment
+        else{
+            setRecyclerAdapter()
+            loadContentToViewModel()
         }
-        setRecyclerAdapter()
-        loadContentToViewModel()
     }
 
     private fun setRecyclerData() {
