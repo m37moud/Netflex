@@ -30,12 +30,13 @@ class MovieCollectionFragment :
     private lateinit var popupMenu: PopupMenu
     override lateinit var viewModel: MovieCollectionViewModel
 
-    override fun onBindViewModel(viewModel: MovieCollectionViewModel) {
-        this.viewModel = viewModel
+    override fun onBindViewModel(viewmodel: MovieCollectionViewModel) {
         configurePopupMenu()
         initRecyclerView()
-        setObserver()
         configureConnectivity()
+        setLifecycleObserver(viewmodel.responseLiveData) {
+            setRecyclerData()
+        }
     }
 
     private fun configureConnectivity() {
@@ -64,12 +65,6 @@ class MovieCollectionFragment :
         }
     }
 
-    private fun setObserver() {
-       setLifecycleObserver(viewModel.responseLiveData) {
-            setRecyclerData()
-        }
-    }
-
     private fun initRecyclerView() {
         if (viewModel.movies.size != 0) setRecyclerAdapter().setData(viewModel.movies)// used to restore state after rotating screen or changing fragment
         else{
@@ -84,15 +79,15 @@ class MovieCollectionFragment :
     }
 
     private fun setRecyclerAdapter(): MovieRecyclerAdapter {
-        val adapter = MovieRecyclerAdapter(::onMovieClick)
+        val mAdapter = MovieRecyclerAdapter(::onMovieClick)
         val spancount = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
         val manager = GridLayoutManager(requireContext(), spancount)
-        with(binding){
-            rvMovies.adapter = adapter
-            rvMovies.layoutManager = manager
-            rvMovies.setOnScrollChangeListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
+        with(binding.rvMovies){
+            adapter = mAdapter
+            layoutManager = manager
+            setOnScrollChangeListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
         }
-        return adapter
+        return mAdapter
     }
 
     private fun loadContentToViewModel(){

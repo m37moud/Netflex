@@ -17,8 +17,7 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, SplashScr
     override val viewModelClass: Class<SplashScreenViewModel>
         get() = SplashScreenViewModel::class.java
 
-    override fun onBindViewModel(viewModel: SplashScreenViewModel) {
-        this.viewModel = viewModel
+    override fun onBindViewModel(viewmodel: SplashScreenViewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             delay(BEFORE_ANIM_DELAY)
 
