@@ -29,8 +29,7 @@ class MovieCollectionFragment :
     private lateinit var popupMenu: PopupMenu
     override lateinit var viewModel: MovieCollectionViewModel
 
-    override fun onBindViewModel(viewModel: MovieCollectionViewModel) {
-        this.viewModel = viewModel
+    override fun onBindViewModel() {
         configurePopupMenu()
         initRecyclerView()
         setObserver()
