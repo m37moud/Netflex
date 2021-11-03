@@ -13,12 +13,11 @@ import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
 
 abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
     abstract val viewModelClass: Class<VM>
-    abstract val viewModel: VM
+    protected abstract var viewModel: VM
 
     protected val binding: VB get() = mBinding!!
     private lateinit var viewModelFactory: MovieViewModelFactory
     private var mBinding: VB? = null
-    private lateinit var viewmodel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +25,7 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
             .builder()
             .app(requireActivity().application)
             .build().getViewModelFactory()
-        viewmodel = ViewModelProvider(this, viewModelFactory).get(viewModelClass)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(viewModelClass)
     }
 
     override fun onCreateView(
@@ -40,7 +39,7 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onBindViewModel(viewmodel)
+        onBindViewModel()
     }
 
     override fun onDestroyView() {
@@ -50,5 +49,5 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
 
     abstract val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> VB
 
-    abstract fun onBindViewModel(viewModel: VM)
+    abstract fun onBindViewModel()
 }
