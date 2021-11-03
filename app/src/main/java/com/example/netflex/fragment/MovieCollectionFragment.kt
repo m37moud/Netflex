@@ -1,7 +1,7 @@
 package com.example.netflex.fragment
 
-import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -17,93 +17,102 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MovieCollectionFragment : BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>(
-    FragmentMovieCollectionBinding::inflate,
-    MovieCollectionViewModel::class.java
-    ) {
+class MovieCollectionFragment :
+    BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>() {
+
+    override val viewModelClass: Class<MovieCollectionViewModel>
+        get() = MovieCollectionViewModel::class.java
+
     private lateinit var adapter: MovieRecyclerAdapter
     private lateinit var popupMenu: PopupMenu
+    override lateinit var viewModel: MovieCollectionViewModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onBindViewModel() {
         configureConnectivity()
         configurePopupMenu()
     }
 
     private fun configureConnectivity() {
-        viewmodel.connectionLiveData.observe(requireActivity()) {
-            binding?.connectionLostLabel?.isVisible = !it
-            if (binding?.rvMovies?.adapter == null) initUI()
-            if (!viewmodel.observed) setObserver()
+        viewModel.connectionLiveData.observe(requireActivity()) {
+            binding.connectionLostLabel.isVisible = !it
+            if (binding.rvMovies.adapter == null) initRecyclerView()
+            if (!viewModel.observed) setObserver()
         }
     }
 
     private fun configurePopupMenu() {
-        popupMenu = PopupMenu(requireContext(), binding?.ibFilter)
+        popupMenu = PopupMenu(requireContext(), binding.ibFilter)
         popupMenu.inflate(R.menu.popup_menu_filter)
-        binding?.ibFilter?.setOnClickListener {
+        binding.ibFilter.setOnClickListener {
             popupMenu.show()
         }
 
         popupMenu.setOnMenuItemClickListener {
-            if (!viewmodel.connectionLiveData.value!!) return@setOnMenuItemClickListener false
-            val category = viewmodel.category
+            if (!viewModel.connectionLiveData.value!!) return@setOnMenuItemClickListener false
+            val category = viewModel.category
             when (it.itemId) {
                 R.id.item_popular -> {
-                    if (category != MovieCategories.Popular) viewmodel.category =
+                    if (category != MovieCategories.Popular) viewModel.category =
                         MovieCategories.Popular
                 }
                 R.id.item_top_rated -> {
-                    if (category != MovieCategories.TopRated) viewmodel.category =
+                    if (category != MovieCategories.TopRated) viewModel.category =
                         MovieCategories.TopRated
                 }
                 R.id.item_favorites -> {
-                    if (category != MovieCategories.Favorite) viewmodel.category =
+                    if (category != MovieCategories.Favorite) viewModel.category =
                         MovieCategories.Favorite
                 }
-                else -> {}
+                else -> {
+                }
             }
-            initUI()
+            initRecyclerView()
             return@setOnMenuItemClickListener false
         }
     }
 
     private fun setObserver() {
-        viewmodel.observed = true
-        viewmodel.responseLiveData.observe(requireActivity()) {
-            (binding?.rvMovies?.adapter as MovieRecyclerAdapter).setData(it, viewmodel.movies)
+        viewModel.observed = true
+        viewModel.responseLiveData.observe(requireActivity()) {
+            (binding.rvMovies.adapter as MovieRecyclerAdapter).setData(it, viewModel.movies)
         }
     }
 
-    private fun initUI() {
-        if (viewmodel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
+    private fun initRecyclerView() {
+        if (viewModel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
             adapter = MovieRecyclerAdapter(null, ::pagingCallback, ::onMovieClick)
-            adapter.setData(viewmodel.responseLiveData.value, viewmodel.movies)
-            binding?.rvMovies?.adapter = adapter
+            adapter.setData(viewModel.responseLiveData.value, viewModel.movies)
+            binding.rvMovies.adapter = adapter
             return
         }
-        if (!viewmodel.connectionLiveData.value!!) return
+        if (!viewModel.connectionLiveData.value!!) return
         adapter = MovieRecyclerAdapter(null, ::pagingCallback, ::onMovieClick)
-        binding?.rvMovies?.adapter = adapter
+        binding.rvMovies.adapter = adapter
 
         lifecycleScope.launch(Dispatchers.Main) {
-            binding?.progressImages?.isVisible = true
-            viewmodel.addMoviesToRecyclerView()
-            binding?.progressImages?.isVisible = false
+            binding.progressImages.isVisible = true
+            viewModel.addMoviesToRecyclerView()
+            binding.progressImages.isVisible = false
         }
     }
 
     private fun pagingCallback(page: Int) {
-        if (!viewmodel.connectionLiveData.value!!) return
+        if (!viewModel.connectionLiveData.value!!) return
         lifecycleScope.launch(Dispatchers.Main) {
-            binding?.progressImages?.isVisible = true
-            viewmodel.addMoviesToRecyclerView(page)
-            binding?.progressImages?.isVisible = false
+            binding.progressImages.isVisible = true
+            viewModel.addMoviesToRecyclerView(page)
+            binding.progressImages.isVisible = false
         }
     }
 
-    private fun onMovieClick(movie: MovieEntity){
-        val action = MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(movie)
+    private fun onMovieClick(movie: MovieEntity) {
+        val action =
+            MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
+                movie
+            )
         findNavController().navigate(action)
     }
+
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieCollectionBinding
+        get() = FragmentMovieCollectionBinding::inflate
 }

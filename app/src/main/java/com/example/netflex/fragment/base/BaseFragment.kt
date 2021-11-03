@@ -11,28 +11,35 @@ import androidx.viewbinding.ViewBinding
 import com.example.netflex.di.component.DaggerFragmentComponent
 import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
 
-abstract class BaseFragment<T, V : ViewModel>(
-    private val inflate: (LayoutInflater, ViewGroup?, Boolean) -> T,
-    private val VM: Class<V>
-) : Fragment() {
-    private lateinit var viewModelFactory: MovieViewModelFactory
+abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
+    abstract val viewModelClass: Class<VM>
+    protected abstract var viewModel: VM
 
-    private var mBinding: T? = null
-    val binding get() = mBinding
-    protected lateinit var viewmodel: V
+    protected val binding: VB get() = mBinding!!
+    private lateinit var viewModelFactory: MovieViewModelFactory
+    private var mBinding: VB? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModelFactory = DaggerFragmentComponent
+            .builder()
+            .app(requireActivity().application)
+            .build().getViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory).get(viewModelClass)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModelFactory = DaggerFragmentComponent
-            .builder()
-            .app(requireActivity().application)
-            .build().getViewModelFactory()
-        viewmodel = ViewModelProvider(this, viewModelFactory).get(VM)
         mBinding = inflate(inflater, container, false)
-        return (binding as ViewBinding).root
+        return mBinding!!.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onBindViewModel()
     }
 
     override fun onDestroyView() {
@@ -40,4 +47,7 @@ abstract class BaseFragment<T, V : ViewModel>(
         mBinding = null
     }
 
+    abstract val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
+
+    abstract fun onBindViewModel()
 }
