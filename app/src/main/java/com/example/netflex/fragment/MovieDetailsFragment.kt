@@ -28,8 +28,7 @@ class MovieDetailsFragment :
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
-    override fun onBindViewModel(viewModel: MovieDetailsViewModel) {
-        this.viewModel = viewModel
+    override fun onBindViewModel() {
         lifecycleScope.launch {
             viewModel.isFavorite = viewModel.isFavorite(movie.id)
             initUI()
@@ -83,6 +82,6 @@ class MovieDetailsFragment :
         }
     }
 
-    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieDetailsBinding
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailsBinding
         get() = FragmentMovieDetailsBinding::inflate
 }
