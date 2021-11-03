@@ -8,6 +8,8 @@ import com.example.netflex.app.MyApp
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.repository.MovieRepository
 import com.example.netflex.utils.getImageAsBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MovieDetailsViewModel(val app: Application): ViewModel() {
     private val movieRepository: MovieRepository = (app as MyApp).appComponent.getMovieRepository()
@@ -28,8 +30,10 @@ class MovieDetailsViewModel(val app: Application): ViewModel() {
     }
 
     suspend fun addToFavorites(movieEntity: MovieEntity){
-        movieEntity.poster = movieEntity.generateImageUrl().getImageAsBitmap(app.baseContext)
-        movieRepository.insertMovieToDb(movieEntity)
+        withContext(Dispatchers.IO){
+            movieEntity.poster = movieEntity.generateImageUrl().getImageAsBitmap(app)
+            movieRepository.insertMovieToDb(movieEntity)
+        }
     }
 
     suspend fun deleteFromFavorites(movieEntity: MovieEntity){

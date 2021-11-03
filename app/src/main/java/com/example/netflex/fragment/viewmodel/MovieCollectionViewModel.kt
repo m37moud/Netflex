@@ -33,14 +33,9 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
         val page = _responseLiveData.value?.page?:0
 
         when (category) {
-            MovieCategories.Popular -> {
-                response = fetchPopularMovies(page + 1)
-            }
-            MovieCategories.TopRated -> {
-                response = fetchTopRatedMovies(page + 1)
-            }
-            MovieCategories.Favorite -> {
-            } // TODO: Configure later
+            MovieCategories.Popular -> response = fetchPopularMovies(page + 1)
+            MovieCategories.TopRated -> response = fetchTopRatedMovies(page + 1)
+            MovieCategories.Favorite -> { } // TODO: Configure later
         }
 
         _responseLiveData.value = response

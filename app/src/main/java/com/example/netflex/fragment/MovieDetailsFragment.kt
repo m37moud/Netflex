@@ -1,5 +1,6 @@
 package com.example.netflex.fragment
 
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -62,10 +63,7 @@ class MovieDetailsFragment :
                         viewModel.addToFavorites(movie)
                         (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
                         viewModel.isFavorite = !viewModel.isFavorite
-
-                    } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Couldn't Save Movie Try Again", Toast.LENGTH_SHORT).show()
-                    }
+                    } catch (e: Exception) { Toast.makeText(requireContext(), "Couldn't Save Movie Try Again", Toast.LENGTH_SHORT).show() }
                 }
                 it.isClickable = true
             }
