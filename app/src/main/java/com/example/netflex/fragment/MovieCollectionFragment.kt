@@ -29,11 +29,13 @@ class MovieCollectionFragment :
     private lateinit var popupMenu: PopupMenu
     override lateinit var viewModel: MovieCollectionViewModel
 
-    override fun onBindViewModel() {
+    override fun onBindViewModel(viewmodel: MovieCollectionViewModel) {
         configurePopupMenu()
         initRecyclerView()
-        setObserver()
         configureConnectivity()
+        viewmodel.responseLiveData.observe(this) {
+            setRecyclerData()
+        }
     }
 
     private fun configureConnectivity() {
@@ -73,12 +75,6 @@ class MovieCollectionFragment :
         }
     }
 
-    private fun setObserver() {
-        viewModel.responseLiveData.observe(this) {
-            setRecyclerData()
-        }
-    }
-
     private fun initRecyclerView() {
         if (viewModel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
             setRecyclerAdapter().setData(viewModel.movies)
@@ -94,15 +90,15 @@ class MovieCollectionFragment :
     }
 
     private fun setRecyclerAdapter(): MovieRecyclerAdapter {
-        val adapter = MovieRecyclerAdapter(::onMovieClick)
+        val mAdapter = MovieRecyclerAdapter(::onMovieClick)
         val spancount = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
         val manager = GridLayoutManager(requireContext(), spancount)
-        with(binding){
-            rvMovies.adapter = adapter
-            rvMovies.layoutManager = manager
-            rvMovies.addOnScrollListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
+        with(binding.rvMovies){
+            adapter = mAdapter
+            layoutManager = manager
+            addOnScrollListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
         }
-        return adapter
+        return mAdapter
     }
 
     private fun loadContentToViewModel(){
@@ -121,6 +117,6 @@ class MovieCollectionFragment :
         findNavController().navigate(action)
     }
 
-    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieCollectionBinding
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieCollectionBinding
         get() = FragmentMovieCollectionBinding::inflate
 }

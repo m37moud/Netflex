@@ -28,7 +28,7 @@ class MovieDetailsFragment :
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
-    override fun onBindViewModel() {
+    override fun onBindViewModel(viewmodel: MovieDetailsViewModel) {
         lifecycleScope.launch {
             viewModel.isFavorite = viewModel.isFavorite(movie.id)
             initUI()

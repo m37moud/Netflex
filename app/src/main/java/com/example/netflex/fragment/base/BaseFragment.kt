@@ -39,7 +39,7 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onBindViewModel()
+        onBindViewModel(viewModel)
     }
 
     override fun onDestroyView() {
@@ -49,5 +49,5 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
 
     abstract val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
 
-    abstract fun onBindViewModel()
+    abstract fun onBindViewModel(viewmodel: VM)
 }
