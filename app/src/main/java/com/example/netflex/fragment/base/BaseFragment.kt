@@ -47,7 +47,7 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
         mBinding = null
     }
 
-    abstract val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> VB
+    abstract val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
 
     abstract fun onBindViewModel()
 }

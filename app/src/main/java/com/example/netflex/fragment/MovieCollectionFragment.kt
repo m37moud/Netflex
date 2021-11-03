@@ -113,6 +113,6 @@ class MovieCollectionFragment :
         findNavController().navigate(action)
     }
 
-    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieCollectionBinding
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieCollectionBinding
         get() = FragmentMovieCollectionBinding::inflate
 }
