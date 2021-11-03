@@ -101,7 +101,7 @@ class MovieCollectionFragment :
         with(binding){
             rvMovies.adapter = adapter
             rvMovies.layoutManager = manager
-            rvMovies.setOnScrollChangeListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
+            rvMovies.addOnScrollListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
         }
         return adapter
     }
