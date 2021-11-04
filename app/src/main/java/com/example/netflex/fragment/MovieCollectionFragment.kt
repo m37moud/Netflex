@@ -29,20 +29,21 @@ class MovieCollectionFragment :
 
     private lateinit var popupMenu: PopupMenu
     override lateinit var viewModel: MovieCollectionViewModel
+    private lateinit var adapter: MovieRecyclerAdapter
 
     override fun onBindViewModel(viewmodel: MovieCollectionViewModel) {
         configurePopupMenu()
-        initRecyclerView()
         configureConnectivity()
-        setLifecycleObserver(viewmodel.responseLiveData) {
-            setRecyclerData()
+        adapter = setRecyclerAdapter()
+        setLifecycleObserver(viewmodel.moviesLiveData) {
+            adapter.setData(it)
         }
     }
 
     private fun configureConnectivity() {
         setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
-            setRecyclerData()
+            if (viewModel.moviesLiveData.value!!.isEmpty()) loadContentToViewModel()
         }
     }
 
@@ -55,24 +56,18 @@ class MovieCollectionFragment :
         popupMenu.setOnMenuItemClickListener {
             val category = viewModel.category
             when (it.itemId) {
-                R.id.item_popular -> if (category != MovieCategories.Popular) viewModel.category = MovieCategories.Popular
-                R.id.item_top_rated -> if (category != MovieCategories.TopRated) viewModel.category = MovieCategories.TopRated
+                R.id.item_popular -> if (category != MovieCategories.Popular) {
+                    viewModel.category = MovieCategories.Popular
+                    loadContentToViewModel()
+                }
+                R.id.item_top_rated -> if (category != MovieCategories.TopRated) {
+                    viewModel.category = MovieCategories.TopRated
+                    loadContentToViewModel()
+                }
                 R.id.item_favorites -> if (category != MovieCategories.Favorite) viewModel.category = MovieCategories.Favorite
-                else -> {}
             }
-            setRecyclerData()
-            return@setOnMenuItemClickListener false
+            false
         }
-    }
-
-    private fun initRecyclerView() {
-        if (viewModel.movies.size != 0) setRecyclerAdapter().setData(viewModel.movies)// used to restore state after rotating screen or changing fragment
-        else setRecyclerAdapter()
-    }
-
-    private fun setRecyclerData() {
-        if (viewModel.movies.isEmpty()) loadContentToViewModel()
-        (binding.rvMovies.adapter as MovieRecyclerAdapter?)?.setData(viewModel.movies)
     }
 
     private fun setRecyclerAdapter(): MovieRecyclerAdapter {
@@ -103,6 +98,6 @@ class MovieCollectionFragment :
         findNavController().navigate(action)
     }
 
-    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentMovieCollectionBinding
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieCollectionBinding
         get() = FragmentMovieCollectionBinding::inflate
 }

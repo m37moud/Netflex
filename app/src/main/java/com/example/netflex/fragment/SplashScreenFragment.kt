@@ -40,7 +40,7 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, SplashScr
         }
     }
 
-    override val inflate: (layoutInflater: LayoutInflater, viewGroup: ViewGroup?, attachToRoot: Boolean) -> FragmentSplashScreenBinding
+    override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSplashScreenBinding
         get() = FragmentSplashScreenBinding::inflate
 
     companion object {
