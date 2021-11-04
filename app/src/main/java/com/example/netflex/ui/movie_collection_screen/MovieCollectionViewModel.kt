@@ -1,14 +1,14 @@
-package com.example.netflex.fragment.viewmodel
+package com.example.netflex.ui.movie_collection_screen
 
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.netflex.app.MyApp
-import com.example.netflex.model.MovieEntity
+import com.example.netflex.model.Movie
 import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.utils.ConnectionLiveData
-import com.example.netflex.utils.MovieCategories
+import com.example.netflex.model.MovieCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -25,8 +25,8 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
 
     val connectionLiveData = ConnectionLiveData(app.baseContext)
 
-    private val _moviesLiveData: MutableLiveData<ArrayList<MovieEntity>> = MutableLiveData(arrayListOf())
-    val moviesLiveData: LiveData<ArrayList<MovieEntity>> get() = _moviesLiveData
+    private val _moviesLiveData: MutableLiveData<ArrayList<Movie>> = MutableLiveData(arrayListOf())
+    val moviesLiveData: LiveData<ArrayList<Movie>> get() = _moviesLiveData
 
     suspend fun addMoviesToRecyclerView() {
         if (connectionLiveData.value == false || connectionLiveData.value == null) return

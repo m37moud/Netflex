@@ -1,4 +1,4 @@
-package com.example.netflex.fragment
+package com.example.netflex.ui.splash_screen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.netflex.R
 import com.example.netflex.databinding.FragmentSplashScreenBinding
-import com.example.netflex.fragment.base.BaseFragment
-import com.example.netflex.fragment.viewmodel.SplashScreenViewModel
+import com.example.netflex.ui.base.BaseFragment
 import com.example.netflex.utils.executeAnimation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.netflex.activity
+package com.example.netflex.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

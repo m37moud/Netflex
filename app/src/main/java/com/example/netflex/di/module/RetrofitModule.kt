@@ -1,7 +1,7 @@
 package com.example.netflex.di.module
 
 import com.example.netflex.retrofit.MovieApi
-import com.example.netflex.utils.RetrofitConstants.BASE_URL
+import com.example.netflex.retrofit.RetrofitConstants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

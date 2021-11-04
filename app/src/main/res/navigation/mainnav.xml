@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.example.netflex.fragment.SplashScreenFragment"
+        android:name="com.example.netflex.ui.splash_screen.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieCollectionFragment"
-        android:name="com.example.netflex.fragment.MovieCollectionFragment"
+        android:name="com.example.netflex.ui.movie_collection_screen.MovieCollectionFragment"
         android:label="fragment_movie_collection"
         tools:layout="@layout/fragment_movie_collection" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"
-        android:name="com.example.netflex.fragment.MovieDetailsFragment"
+        android:name="com.example.netflex.ui.movie_details_screen.MovieDetailsFragment"
         android:label="fragment_movie_details"
         tools:layout="@layout/fragment_movie_details" >
         <action
@@ -36,6 +36,6 @@
             app:destination="@id/movieCollectionFragment" />
         <argument
             android:name="clickedMovie"
-            app:argType="com.example.netflex.model.MovieEntity" />
+            app:argType="com.example.netflex.model.Movie" />
     </fragment>
 </navigation>

@@ -3,11 +3,11 @@ package com.example.netflex.model
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.netflex.utils.RetrofitConstants
+import com.example.netflex.retrofit.RetrofitConstants
 import java.io.Serializable
 
 @Entity(tableName = "movies")
-data class MovieEntity(
+data class Movie(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String,

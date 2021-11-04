@@ -1,4 +1,4 @@
-package com.example.netflex.utils
+package com.example.netflex.retrofit
 
 object RetrofitConstants {
     const val BASE_URL = "https://api.themoviedb.org/3/movie/"

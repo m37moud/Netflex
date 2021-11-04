@@ -2,7 +2,7 @@ package com.example.netflex.di.component
 
 import android.app.Application
 import com.example.netflex.di.module.ViewModelModule
-import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
+import com.example.netflex.ui.factory.MovieViewModelFactory
 import dagger.BindsInstance
 import dagger.Component
 

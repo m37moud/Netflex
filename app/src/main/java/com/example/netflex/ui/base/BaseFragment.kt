@@ -1,4 +1,4 @@
-package com.example.netflex.fragment.base
+package com.example.netflex.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.example.netflex.di.component.DaggerFragmentComponent
-import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
+import com.example.netflex.ui.factory.MovieViewModelFactory
 
 abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
     abstract val viewModelClass: Class<VM>

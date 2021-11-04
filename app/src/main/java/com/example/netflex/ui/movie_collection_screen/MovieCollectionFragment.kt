@@ -1,4 +1,4 @@
-package com.example.netflex.fragment
+package com.example.netflex.ui.movie_collection_screen
 
 import android.content.res.Configuration
 import android.view.LayoutInflater
@@ -9,13 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.netflex.R
-import com.example.netflex.adapter.MovieRecyclerAdapter
-import com.example.netflex.adapter.scroll_listener.RecyclerScrollListener
+import com.example.netflex.ui.adapter.MovieRecyclerAdapter
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
-import com.example.netflex.fragment.base.BaseFragment
-import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
-import com.example.netflex.model.MovieEntity
-import com.example.netflex.utils.MovieCategories
+import com.example.netflex.ui.base.BaseFragment
+import com.example.netflex.model.Movie
+import com.example.netflex.model.MovieCategories
+import com.example.netflex.ui.adapter.scroll_listener.RecyclerScrollListener
 import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -90,8 +89,11 @@ class MovieCollectionFragment :
         }
     }
 
-    private fun onMovieClick(movie: MovieEntity) {
-        val action = MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(movie)
+    private fun onMovieClick(movie: Movie) {
+        val action =
+            MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
+                movie
+            )
         findNavController().navigate(action)
     }
 

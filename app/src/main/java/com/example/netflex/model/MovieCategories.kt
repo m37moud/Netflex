@@ -1,4 +1,4 @@
-package com.example.netflex.utils
+package com.example.netflex.model
 
 sealed class MovieCategories{
     object Popular: MovieCategories()

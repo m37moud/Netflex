@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.netflex.di.annotation.ViewModelKey
-import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
-import com.example.netflex.fragment.viewmodel.MovieDetailsViewModel
-import com.example.netflex.fragment.viewmodel.SplashScreenViewModel
-import com.example.netflex.fragment.viewmodel.factory.MovieViewModelFactory
+import com.example.netflex.ui.movie_collection_screen.MovieCollectionViewModel
+import com.example.netflex.ui.movie_details_screen.MovieDetailsViewModel
+import com.example.netflex.ui.splash_screen.SplashScreenViewModel
+import com.example.netflex.ui.factory.MovieViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap

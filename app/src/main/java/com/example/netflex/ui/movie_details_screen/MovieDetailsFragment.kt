@@ -1,4 +1,4 @@
-package com.example.netflex.fragment
+package com.example.netflex.ui.movie_details_screen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.netflex.R
 import com.example.netflex.databinding.FragmentMovieDetailsBinding
-import com.example.netflex.fragment.base.BaseFragment
-import com.example.netflex.fragment.viewmodel.MovieDetailsViewModel
-import com.example.netflex.model.MovieEntity
+import com.example.netflex.ui.base.BaseFragment
+import com.example.netflex.model.Movie
 import com.example.netflex.utils.loadImage
 import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.launch
@@ -16,17 +15,17 @@ import kotlinx.coroutines.launch
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private val movie: MovieEntity
+    private val movie: Movie
         get() = args.clickedMovie
 
     override lateinit var viewModel: MovieDetailsViewModel
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
-    private lateinit var action: suspend (MovieEntity) -> Unit
+    private lateinit var action: suspend (Movie) -> Unit
 
     override fun onBindViewModel(viewmodel: MovieDetailsViewModel) {
-        viewModel.movieEntity = movie
+        viewModel.movie = movie
         configureAddToFavorites()
         initUI()
     }

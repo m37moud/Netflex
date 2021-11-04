@@ -1,4 +1,4 @@
-package com.example.netflex.adapter.scroll_listener
+package com.example.netflex.ui.adapter.scroll_listener
 
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
