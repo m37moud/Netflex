@@ -21,13 +21,14 @@ import kotlinx.coroutines.withContext
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
     private val args: MovieDetailsFragmentArgs by navArgs()
-    private val movie: MovieEntity = args.clickedMovie
+    private val movie: MovieEntity
+        get() = args.clickedMovie
 
     override lateinit var viewModel: MovieDetailsViewModel
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
-    override fun onBindViewModel() {
+    override fun onBindViewModel(viewmodel: MovieDetailsViewModel) {
         lifecycleScope.launch {
             viewModel.isFavorite = viewModel.isFavorite(movie.id)
             initUI()

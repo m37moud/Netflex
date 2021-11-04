@@ -1,7 +1,6 @@
 package com.example.netflex.fragment.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,6 @@ import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
 
 class MovieCollectionViewModel(app: Application): ViewModel() {
-    var observed = false
 
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
@@ -28,15 +26,17 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
     val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
     val movies = mutableListOf<MovieEntity>()
 
-    suspend fun addMoviesToRecyclerView(page: Int = 1) {
+    suspend fun addMoviesToRecyclerView() {
+        if (connectionLiveData.value == false || connectionLiveData.value == null) return
         var response: ApiResponse? = null
+        val page = _responseLiveData.value?.page?:0
 
         when (category) {
             MovieCategories.Popular -> {
-                response = fetchPopularMovies(page)
+                response = fetchPopularMovies(page + 1)
             }
             MovieCategories.TopRated -> {
-                response = fetchTopRatedMovies(page)
+                response = fetchTopRatedMovies(page + 1)
             }
             MovieCategories.Favorite -> {
             } // TODO: Configure later
