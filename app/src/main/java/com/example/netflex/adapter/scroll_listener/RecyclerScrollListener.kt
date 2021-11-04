@@ -1,25 +1,21 @@
-package com.example.netflex.adapter.scroll_listener
+package com.example.netflex.ui.adapter.scroll_listener
 
-import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerScrollListener(
     private val manager: GridLayoutManager,
     private val callback: () -> Unit
-): View.OnScrollChangeListener {
+): RecyclerView.OnScrollListener() {
     private var previousDataCount = manager.itemCount
-
-    override fun onScrollChange(
-        v: View?,
-        scrollX: Int,
-        scrollY: Int,
-        oldScrollX: Int,
-        oldScrollY: Int
-    ) {
+    
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
         if (manager.findFirstVisibleItemPosition() + manager.childCount >= manager.itemCount
             && previousDataCount != manager.itemCount){
             callback()
             previousDataCount = manager.itemCount
         }
     }
+    
 }
