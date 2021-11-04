@@ -76,7 +76,7 @@ class MovieCollectionFragment :
         with(binding.rvMovies){
             adapter = mAdapter
             layoutManager = manager
-            setOnScrollChangeListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
+            addOnScrollListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
         }
         return mAdapter
     }
