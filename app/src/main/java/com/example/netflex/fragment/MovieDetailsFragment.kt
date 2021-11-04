@@ -1,10 +1,7 @@
 package com.example.netflex.fragment
 
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.netflex.R
@@ -26,14 +23,12 @@ class MovieDetailsFragment :
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
+    private lateinit var action: suspend (MovieEntity) -> Unit
+
     override fun onBindViewModel(viewmodel: MovieDetailsViewModel) {
         viewModel.movieEntity = movie
         configureAddToFavorites()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.isFavorite = viewModel.isFavorite(movie.id)
-            initUI()
-        }
+        initUI()
     }
 
     private fun initUI() {
@@ -45,7 +40,16 @@ class MovieDetailsFragment :
                 description.text = it.overview
                 releaseYear.text = it.release_date
                 ivPoster.loadImage(requireContext(), it.generateImageUrl())
-                if (viewModel.isFavorite) btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            }
+        }
+
+        setLifecycleObserver(viewModel.isFavorite){
+            if (it){
+                binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+                action = viewModel::deleteFromFavorites
+            }else{
+                binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                action = viewModel::addToFavorites
             }
         }
     }
@@ -54,17 +58,7 @@ class MovieDetailsFragment :
         binding.btnFavorite.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 it.isClickable = false
-                if (viewModel.isFavorite) {
-                    viewModel.deleteFromFavorites(movie)
-                    (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    viewModel.isFavorite = !viewModel.isFavorite
-                } else {
-                    try {
-                        viewModel.addToFavorites(movie)
-                        (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
-                        viewModel.isFavorite = !viewModel.isFavorite
-                    } catch (e: Exception) { Toast.makeText(requireContext(), "Couldn't Save Movie Try Again", Toast.LENGTH_SHORT).show() }
-                }
+                action(movie)
                 it.isClickable = true
             }
         }

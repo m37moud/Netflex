@@ -14,4 +14,6 @@ interface Repository {
     suspend fun insertMovieToDb(movieEntity: MovieEntity)
 
     suspend fun deleteMovie(movieEntity: MovieEntity)
+
+    suspend fun checkIsSaved(id: Int): Boolean
 }

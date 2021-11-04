@@ -22,4 +22,5 @@ class MovieRepository @Inject constructor(private val movieDao: MovieDao,
 
     override suspend fun deleteMovie(movieEntity: MovieEntity) = movieDao.deleteMovie(movieEntity)
 
+    override suspend fun checkIsSaved(id: Int): Boolean = movieDao.checkIsSaved(id)
 }

@@ -8,7 +8,6 @@ import com.example.netflex.model.MovieEntity
 
 @Dao
 interface MovieDao {
-
     @Query("SELECT * FROM movies WHERE id=:id")
     suspend fun findMovieById(id: Int): MovieEntity?
 
@@ -17,4 +16,7 @@ interface MovieDao {
 
     @Delete
     suspend fun deleteMovie(movieEntity: MovieEntity)
+
+    @Query("SELECT EXISTS(SELECT * FROM movies WHERE id=:id)")
+    fun checkIsSaved(id: Int): Boolean
 }

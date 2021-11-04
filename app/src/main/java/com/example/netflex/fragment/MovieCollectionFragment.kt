@@ -91,10 +91,7 @@ class MovieCollectionFragment :
     }
 
     private fun onMovieClick(movie: MovieEntity) {
-        val action =
-            MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
-                movie
-            )
+        val action = MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(movie)
         findNavController().navigate(action)
     }
 
