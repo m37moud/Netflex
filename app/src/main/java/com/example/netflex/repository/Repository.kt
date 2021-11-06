@@ -16,4 +16,6 @@ interface Repository {
     suspend fun deleteMovie(movie: Movie)
 
     suspend fun checkIsSaved(id: Int): Boolean
+
+    suspend fun fetchAllSavedMovies(): List<Movie>
 }

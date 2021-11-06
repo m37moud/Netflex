@@ -18,33 +18,32 @@ class MovieCollectionViewModel(app: Application): ViewModel() {
     private var response: ApiResponse? = null
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
-            _moviesLiveData.value!!.clear()
+            movies.clear()
             response = null
             field = value
         }
 
     val connectionLiveData = ConnectionLiveData(app.baseContext)
+    private val movies: MutableList<Movie> = mutableListOf()
 
-    private val _moviesLiveData: MutableLiveData<ArrayList<Movie>> = MutableLiveData(arrayListOf())
-    val moviesLiveData: LiveData<ArrayList<Movie>> get() = _moviesLiveData
+    private val _moviesLiveData: MutableLiveData<List<Movie>> = MutableLiveData(movies)
+    val moviesLiveData: LiveData<List<Movie>> get() = _moviesLiveData
 
     suspend fun addMoviesToRecyclerView() {
-        if (connectionLiveData.value == false || connectionLiveData.value == null) return
+        if ((connectionLiveData.value == false || connectionLiveData.value == null) && category != MovieCategories.Favorite) return
         withContext(Dispatchers.IO){
             response = getCorrespondingResponse()
         }
-        _moviesLiveData.value!!.addAll(response?.results!!)
     }
 
-    private suspend fun getCorrespondingResponse(): ApiResponse? {
-        var mResponse: ApiResponse? = null
-
-        when (category) {
-            MovieCategories.Popular -> mResponse = fetchPopularMovies(response?.page?.plus(1) ?: 1)
-            MovieCategories.TopRated -> mResponse = fetchTopRatedMovies(response?.page?.plus(1) ?: 1)
-            MovieCategories.Favorite -> { } // TODO: Configure later
+    private suspend fun getCorrespondingResponse(): ApiResponse {
+        val mResponse: ApiResponse? = when (category) {
+            MovieCategories.Popular -> fetchPopularMovies(response?.page?.plus(1) ?: 1)
+            MovieCategories.TopRated -> fetchTopRatedMovies(response?.page?.plus(1) ?: 1)
+            MovieCategories.Favorite -> ApiResponse(-1, movieRepository.fetchAllSavedMovies())
         }
-
+        movies.addAll(mResponse?.results!!)
+        _moviesLiveData.postValue(movies)
         return mResponse
     }
 

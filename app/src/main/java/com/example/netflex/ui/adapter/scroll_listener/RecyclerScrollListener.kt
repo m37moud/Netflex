@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerScrollListener(
     private val manager: GridLayoutManager,
-    private val callback: () -> Unit
+    private val callback: (Boolean) -> Unit
 ): RecyclerView.OnScrollListener() {
     private var previousDataCount = manager.itemCount
     
@@ -13,7 +13,7 @@ class RecyclerScrollListener(
         super.onScrolled(recyclerView, dx, dy)
         if (manager.findFirstVisibleItemPosition() + manager.childCount >= manager.itemCount
             && previousDataCount != manager.itemCount){
-            callback()
+            callback(true)
             previousDataCount = manager.itemCount
         }
     }

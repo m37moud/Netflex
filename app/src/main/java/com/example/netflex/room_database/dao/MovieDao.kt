@@ -18,5 +18,8 @@ interface MovieDao {
     suspend fun deleteMovie(movie: Movie)
 
     @Query("SELECT EXISTS(SELECT * FROM movies WHERE id=:id)")
-    fun checkIsSaved(id: Int): Boolean
+    suspend fun checkIsSaved(id: Int): Boolean
+
+    @Query("SELECT * FROM movies")
+    suspend fun fetchAllSavedMovies(): MutableList<Movie>
 }
