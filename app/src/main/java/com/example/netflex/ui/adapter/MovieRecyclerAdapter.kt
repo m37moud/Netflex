@@ -1,17 +1,17 @@
 package com.example.netflex.ui.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netflex.databinding.RecyclerSampleItemBinding
 import com.example.netflex.model.Movie
+import com.example.netflex.utils.DiffUtils
+import com.example.netflex.utils.extensions.setDataToAdapter
 import com.example.netflex.utils.loadImage
 
 class MovieRecyclerAdapter(
     private val onMovieClick: (movie: Movie) -> Unit
-) :
-    RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<MovieRecyclerAdapter.MovieViewHolder>() {
 
     class MovieViewHolder(binding: RecyclerSampleItemBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -42,10 +42,10 @@ class MovieRecyclerAdapter(
         return data.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setData(movies: MutableList<Movie>){
         this.data = movies
-        notifyDataSetChanged()
+        val myDiffUtil = DiffUtils(data, movies)
+        myDiffUtil.setDataToAdapter(this)
     }
 
 }

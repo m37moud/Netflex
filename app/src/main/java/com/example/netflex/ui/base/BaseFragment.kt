@@ -15,6 +15,9 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
     abstract val viewModelClass: Class<VM>
     protected abstract var viewModel: VM
 
+    abstract val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
+    abstract fun onBindViewModel(vm: VM)
+
     protected val binding: VB get() = mBinding!!
     private lateinit var viewModelFactory: MovieViewModelFactory
     private var mBinding: VB? = null
@@ -46,8 +49,4 @@ abstract class BaseFragment<VB: ViewBinding, VM : ViewModel> : Fragment() {
         super.onDestroyView()
         mBinding = null
     }
-
-    abstract val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
-
-    abstract fun onBindViewModel(viewmodel: VM)
 }

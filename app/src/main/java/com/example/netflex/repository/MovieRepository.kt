@@ -10,9 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class MovieRepository @Inject constructor(private val movieDao: MovieDao,
                                           private val movieApi: MovieApi): Repository {
-    override suspend fun fetchPopularMovies(page: Int): ApiResponse? {
-        return movieApi.getPopularMovies(page)
-    }
+    override suspend fun fetchPopularMovies(page: Int) = movieApi.getPopularMovies(page)
 
     override suspend fun fetchTopRatedMovies(page: Int) = movieApi.getTopRatedMovies(page)
 

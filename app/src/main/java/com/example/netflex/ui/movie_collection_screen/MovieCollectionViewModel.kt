@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.netflex.app.MyApp
 import com.example.netflex.model.Movie
+import com.example.netflex.model.MovieCategories
 import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.utils.ConnectionLiveData
-import com.example.netflex.model.MovieCategories
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -5,7 +5,9 @@ import com.example.netflex.di.module.ViewModelModule
 import com.example.netflex.ui.factory.MovieViewModelFactory
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 @Component(modules = [ViewModelModule::class])
 interface FragmentComponent {
     fun getViewModelFactory(): MovieViewModelFactory

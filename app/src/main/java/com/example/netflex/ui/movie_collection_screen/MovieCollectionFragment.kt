@@ -30,11 +30,11 @@ class MovieCollectionFragment :
     override lateinit var viewModel: MovieCollectionViewModel
     private lateinit var adapter: MovieRecyclerAdapter
 
-    override fun onBindViewModel(viewmodel: MovieCollectionViewModel) {
+    override fun onBindViewModel(vm: MovieCollectionViewModel) {
         configurePopupMenu()
         configureConnectivity()
         adapter = setRecyclerAdapter()
-        setLifecycleObserver(viewmodel.moviesLiveData) {
+        setLifecycleObserver(vm.moviesLiveData) {
             adapter.setData(it)
         }
     }

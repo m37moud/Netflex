@@ -24,8 +24,8 @@ class MovieDetailsFragment :
 
     private lateinit var action: suspend (Movie) -> Unit
 
-    override fun onBindViewModel(viewmodel: MovieDetailsViewModel) {
-        viewModel.movie = movie
+    override fun onBindViewModel(vm: MovieDetailsViewModel) {
+        vm.movie = movie
         configureAddToFavorites()
         initUI()
     }
