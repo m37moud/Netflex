@@ -1,6 +1,7 @@
 package com.example.netflex.ui.movie_collection_screen
 
 import android.content.res.Configuration
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -40,6 +41,7 @@ class MovieCollectionFragment :
     }
 
     private fun configureConnectivity() {
+        viewModel.setupConnectionLivedata()
         setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
             if (viewModel.moviesLiveData.value!!.isEmpty()) loadContentToViewModel()

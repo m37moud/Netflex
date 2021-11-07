@@ -12,8 +12,10 @@ import com.example.netflex.utils.ConnectionLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MovieCollectionViewModel(app: Application, private val movieRepository: MovieRepository): ViewModel() {
+class MovieCollectionViewModel(private val app: Application, private val movieRepository: MovieRepository) :
+    ViewModel() {
 
+    lateinit var connectionLiveData: ConnectionLiveData
     private var response: ApiResponse? = null
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
@@ -22,14 +24,12 @@ class MovieCollectionViewModel(app: Application, private val movieRepository: Mo
             field = value
         }
 
-    val connectionLiveData = ConnectionLiveData(app.baseContext)
-
     private val _moviesLiveData: MutableLiveData<ArrayList<Movie>> = MutableLiveData(arrayListOf())
     val moviesLiveData: LiveData<ArrayList<Movie>> get() = _moviesLiveData
 
     suspend fun addMoviesToRecyclerView() {
-        if (connectionLiveData.value == false || connectionLiveData.value == null) return
-        withContext(Dispatchers.IO){
+        if (connectionLiveData.value == false) return
+        withContext(Dispatchers.IO) {
             response = getCorrespondingResponse()
         }
         _moviesLiveData.value!!.addAll(response?.results!!)
@@ -41,7 +41,8 @@ class MovieCollectionViewModel(app: Application, private val movieRepository: Mo
         when (category) {
             MovieCategories.Popular -> mResponse = fetchPopularMovies(response?.page?.plus(1) ?: 1)
             MovieCategories.TopRated -> mResponse = fetchTopRatedMovies(response?.page?.plus(1) ?: 1)
-            MovieCategories.Favorite -> { } // TODO: Configure later
+            MovieCategories.Favorite -> {
+            } // TODO: Configure later
         }
 
         return mResponse
@@ -53,6 +54,16 @@ class MovieCollectionViewModel(app: Application, private val movieRepository: Mo
 
     private suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
         return movieRepository.fetchTopRatedMovies(page)
+    }
+
+    fun setupConnectionLivedata() {
+        connectionLiveData = ConnectionLiveData(app.baseContext)
+        val pingCommand = "ping -c 1 google.com"
+        connectionLiveData.value = try {
+            Runtime.getRuntime().exec(pingCommand).waitFor() == 0
+        } catch (e: Exception) {
+            false
+        }
     }
 
 }
