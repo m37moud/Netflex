@@ -1,7 +1,6 @@
 package com.example.netflex.ui.movie_collection_screen
 
 import android.content.res.Configuration
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -10,12 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.netflex.R
-import com.example.netflex.ui.adapter.MovieRecyclerAdapter
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
-import com.example.netflex.ui.base.BaseFragment
 import com.example.netflex.model.Movie
 import com.example.netflex.model.MovieCategories
+import com.example.netflex.ui.adapter.MovieRecyclerAdapter
 import com.example.netflex.ui.adapter.scroll_listener.RecyclerScrollListener
+import com.example.netflex.ui.base.BaseFragment
 import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
