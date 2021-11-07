@@ -4,17 +4,16 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.netflex.app.MyApp
 import com.example.netflex.model.Movie
 import com.example.netflex.model.MovieCategories
+import com.example.netflex.repository.MovieRepository
 import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.utils.ConnectionLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MovieCollectionViewModel(app: Application): ViewModel() {
+class MovieCollectionViewModel(app: Application, private val movieRepository: MovieRepository): ViewModel() {
 
-    private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
     private var response: ApiResponse? = null
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
