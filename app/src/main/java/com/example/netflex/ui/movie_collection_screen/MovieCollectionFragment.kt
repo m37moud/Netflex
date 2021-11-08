@@ -7,6 +7,7 @@ import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.netflex.R
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
@@ -23,6 +24,10 @@ import kotlinx.coroutines.launch
 class MovieCollectionFragment :
     BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>() {
 
+    private val args: MovieCollectionFragmentArgs by navArgs()
+    private val movieId: Int
+        get() = args.deletedMovieId
+
     override val viewModelClass: Class<MovieCollectionViewModel>
         get() = MovieCollectionViewModel::class.java
 
@@ -34,6 +39,7 @@ class MovieCollectionFragment :
         configurePopupMenu()
         configureConnectivity()
         adapter = setRecyclerAdapter()
+        if (viewModel.category == MovieCategories.Favorite) loadContentToViewModel()
         setLifecycleObserver(vm.moviesLiveData) {
             adapter.setData(it)
         }
@@ -55,6 +61,7 @@ class MovieCollectionFragment :
             popupMenu.show()
         }
         popupMenu.setOnMenuItemClickListener {
+            adapter.clearData()
             when (it.itemId) {
                 R.id.item_popular -> viewModel.category = MovieCategories.Popular
                 R.id.item_top_rated -> viewModel.category = MovieCategories.TopRated

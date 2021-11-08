@@ -1,5 +1,6 @@
 package com.example.netflex.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +47,12 @@ class MovieRecyclerAdapter(
         val myDiffUtil = DiffUtils(data, movies)
         myDiffUtil.setDataToAdapter(this)
         this.data = movies
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearData(){
+        this.data = listOf()
+        notifyDataSetChanged()
     }
 
 }

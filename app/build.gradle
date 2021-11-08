@@ -45,7 +45,7 @@ android {
 
         create("toprated") {
             dimension = "version"
-            applicationIdSuffix = ".toprated"
+            applicationIdSuffix = ".topRated"
         }
     }
 }
