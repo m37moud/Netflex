@@ -91,11 +91,13 @@ class MovieCollectionFragment :
     }
 
     private fun onMovieClick(movie: Movie) {
-        val action =
-            MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
-                movie
-            )
-        findNavController().navigate(action)
+        if (findNavController().currentDestination?.id == R.id.movieCollectionFragment){
+            val action =
+                MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
+                    movie
+                )
+            findNavController().navigate(action)
+        }
     }
 
     override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieCollectionBinding
