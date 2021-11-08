@@ -12,8 +12,9 @@ import com.example.netflex.utils.ConnectionLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MovieCollectionViewModel(private val app: Application, private val movieRepository: MovieRepository) :
-    ViewModel() {
+class MovieCollectionViewModel(private val app: Application,
+                               private val movieRepository: MovieRepository)
+    : ViewModel() {
 
     lateinit var connectionLiveData: ConnectionLiveData
     private var response: ApiResponse? = null

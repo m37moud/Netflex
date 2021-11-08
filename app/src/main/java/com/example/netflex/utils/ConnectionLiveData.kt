@@ -60,7 +60,7 @@ class ConnectionLiveData(context: Context) : MutableLiveData<Boolean>() {
     }
 
     companion object{
-        const val GOOGLE_URL = "https://www.google.com"
+        private const val GOOGLE_URL = "https://www.google.com"
     }
 
 }

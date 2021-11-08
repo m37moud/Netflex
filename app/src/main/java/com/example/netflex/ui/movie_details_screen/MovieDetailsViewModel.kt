@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.netflex.app.MyApp
 import com.example.netflex.model.Movie
 import com.example.netflex.repository.MovieRepository
 import com.example.netflex.utils.getImageAsBitmap
@@ -14,8 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MovieDetailsViewModel(val app: Application): ViewModel() {
-    private val movieRepository: MovieRepository = (app as MyApp).appComponent.getMovieRepository()
+class MovieDetailsViewModel(private val app: Application,
+                            private val movieRepository: MovieRepository)
+    : ViewModel() {
     var movie: Movie? = null
     set(value) {
         _movieLiveData.value = value
