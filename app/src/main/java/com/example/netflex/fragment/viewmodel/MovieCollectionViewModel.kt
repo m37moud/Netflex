@@ -9,41 +9,43 @@ import com.example.netflex.model.MovieEntity
 import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.utils.ConnectionLiveData
 import com.example.netflex.utils.MovieCategories
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MovieCollectionViewModel(app: Application): ViewModel() {
 
+    private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
+    private var response: ApiResponse? = null
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
-            movies.clear()
+            _moviesLiveData.value!!.clear()
+            response = null
             field = value
         }
 
     val connectionLiveData = ConnectionLiveData(app.baseContext)
 
-    private val movieRepository = (app as MyApp).appComponent.getMovieRepository()
-
-    private val _responseLiveData = MutableLiveData<ApiResponse>()
-    val responseLiveData: LiveData<ApiResponse> get() = _responseLiveData
-    val movies = mutableListOf<MovieEntity>()
+    private val _moviesLiveData: MutableLiveData<ArrayList<MovieEntity>> = MutableLiveData(arrayListOf())
+    val moviesLiveData: LiveData<ArrayList<MovieEntity>> get() = _moviesLiveData
 
     suspend fun addMoviesToRecyclerView() {
         if (connectionLiveData.value == false || connectionLiveData.value == null) return
-        var response: ApiResponse? = null
-        val page = _responseLiveData.value?.page?:0
+        withContext(Dispatchers.IO){
+            response = getCorrespondingResponse()
+        }
+        _moviesLiveData.value!!.addAll(response?.results!!)
+    }
+
+    private suspend fun getCorrespondingResponse(): ApiResponse? {
+        var mResponse: ApiResponse? = null
 
         when (category) {
-            MovieCategories.Popular -> {
-                response = fetchPopularMovies(page + 1)
-            }
-            MovieCategories.TopRated -> {
-                response = fetchTopRatedMovies(page + 1)
-            }
-            MovieCategories.Favorite -> {
-            } // TODO: Configure later
+            MovieCategories.Popular -> mResponse = fetchPopularMovies(response?.page?.plus(1) ?: 1)
+            MovieCategories.TopRated -> mResponse = fetchTopRatedMovies(response?.page?.plus(1) ?: 1)
+            MovieCategories.Favorite -> { } // TODO: Configure later
         }
 
-        _responseLiveData.value = response
-        movies.addAll(response?.results!!)
+        return mResponse
     }
 
     private suspend fun fetchPopularMovies(page: Int): ApiResponse? {

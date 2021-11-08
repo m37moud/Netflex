@@ -16,6 +16,7 @@ import com.example.netflex.fragment.base.BaseFragment
 import com.example.netflex.fragment.viewmodel.MovieCollectionViewModel
 import com.example.netflex.model.MovieEntity
 import com.example.netflex.utils.MovieCategories
+import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,20 +29,21 @@ class MovieCollectionFragment :
 
     private lateinit var popupMenu: PopupMenu
     override lateinit var viewModel: MovieCollectionViewModel
+    private lateinit var adapter: MovieRecyclerAdapter
 
     override fun onBindViewModel(viewmodel: MovieCollectionViewModel) {
         configurePopupMenu()
-        initRecyclerView()
         configureConnectivity()
-        viewmodel.responseLiveData.observe(this) {
-            setRecyclerData()
+        adapter = setRecyclerAdapter()
+        setLifecycleObserver(viewmodel.moviesLiveData) {
+            adapter.setData(it)
         }
     }
 
     private fun configureConnectivity() {
-        viewModel.connectionLiveData.observe(this) {
+        setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
-            setRecyclerData()
+            if (viewModel.moviesLiveData.value!!.isEmpty()) loadContentToViewModel()
         }
     }
 
@@ -51,42 +53,21 @@ class MovieCollectionFragment :
         binding.ibFilter.setOnClickListener {
             popupMenu.show()
         }
-
         popupMenu.setOnMenuItemClickListener {
             val category = viewModel.category
             when (it.itemId) {
-                R.id.item_popular -> {
-                    if (category != MovieCategories.Popular) viewModel.category =
-                        MovieCategories.Popular
+                R.id.item_popular -> if (category != MovieCategories.Popular) {
+                    viewModel.category = MovieCategories.Popular
+                    loadContentToViewModel()
                 }
-                R.id.item_top_rated -> {
-                    if (category != MovieCategories.TopRated) viewModel.category =
-                        MovieCategories.TopRated
+                R.id.item_top_rated -> if (category != MovieCategories.TopRated) {
+                    viewModel.category = MovieCategories.TopRated
+                    loadContentToViewModel()
                 }
-                R.id.item_favorites -> {
-                    if (category != MovieCategories.Favorite) viewModel.category =
-                        MovieCategories.Favorite
-                }
-                else -> {
-                }
+                R.id.item_favorites -> if (category != MovieCategories.Favorite) viewModel.category = MovieCategories.Favorite
             }
-            setRecyclerData()
-            return@setOnMenuItemClickListener false
+            false
         }
-    }
-
-    private fun initRecyclerView() {
-        if (viewModel.movies.size != 0) { // used to restore state after rotating screen or changing fragment
-            setRecyclerAdapter().setData(viewModel.movies)
-            return
-        }
-        setRecyclerAdapter()
-        loadContentToViewModel()
-    }
-
-    private fun setRecyclerData() {
-        if (viewModel.movies.isEmpty()) loadContentToViewModel()
-        (binding.rvMovies.adapter as MovieRecyclerAdapter?)?.setData(viewModel.movies)
     }
 
     private fun setRecyclerAdapter(): MovieRecyclerAdapter {
@@ -102,7 +83,7 @@ class MovieCollectionFragment :
     }
 
     private fun loadContentToViewModel(){
-        lifecycleScope.launch(Dispatchers.Main) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.progressImages.isVisible = true
             viewModel.addMoviesToRecyclerView()
             binding.progressImages.isVisible = false
@@ -110,10 +91,7 @@ class MovieCollectionFragment :
     }
 
     private fun onMovieClick(movie: MovieEntity) {
-        val action =
-            MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
-                movie
-            )
+        val action = MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(movie)
         findNavController().navigate(action)
     }
 

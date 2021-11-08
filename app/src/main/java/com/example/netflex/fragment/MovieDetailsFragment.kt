@@ -2,8 +2,6 @@ package com.example.netflex.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.netflex.R
@@ -11,12 +9,9 @@ import com.example.netflex.databinding.FragmentMovieDetailsBinding
 import com.example.netflex.fragment.base.BaseFragment
 import com.example.netflex.fragment.viewmodel.MovieDetailsViewModel
 import com.example.netflex.model.MovieEntity
-import com.example.netflex.utils.addPrefix
-import com.example.netflex.utils.getImageAsBitmap
 import com.example.netflex.utils.loadImage
-import kotlinx.coroutines.Dispatchers
+import com.example.netflex.utils.setLifecycleObserver
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MovieDetailsFragment :
     BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
@@ -28,57 +23,44 @@ class MovieDetailsFragment :
     override val viewModelClass: Class<MovieDetailsViewModel>
         get() = MovieDetailsViewModel::class.java
 
+    private lateinit var action: suspend (MovieEntity) -> Unit
+
     override fun onBindViewModel(viewmodel: MovieDetailsViewModel) {
-        lifecycleScope.launch {
-            viewModel.isFavorite = viewModel.isFavorite(movie.id)
-            initUI()
-        }
+        viewModel.movieEntity = movie
         configureAddToFavorites()
+        initUI()
     }
 
     private fun initUI() {
-        with(binding) {
-            title.text = movie.title
-            originalTitle.text = movie.original_title.addPrefix("Original title: ")
-            rating.text = movie.vote_average.toString().addPrefix("Rating: ")
-            description.text = movie.overview.addPrefix("Overview:\n")
-            releaseYear.text = movie.release_date.addPrefix("Release date: ")
-            ivPoster.loadImage(requireContext(), movie.generateImageUrl())
-            if (viewModel.isFavorite) this.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        setLifecycleObserver(viewModel.movieLiveData){
+            with(binding) {
+                title.text = it.title
+                originalTitle.text = it.original_title
+                rating.text = it.vote_average.toString()
+                description.text = it.overview
+                releaseYear.text = it.release_date
+                ivPoster.loadImage(requireContext(), it.generateImageUrl())
+            }
+        }
+
+        setLifecycleObserver(viewModel.isFavorite){
+            if (it){
+                binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+                action = viewModel::deleteFromFavorites
+            }else{
+                binding.btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                action = viewModel::addToFavorites
+            }
         }
     }
 
     private fun configureAddToFavorites() {
         binding.btnFavorite.setOnClickListener {
-
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 it.isClickable = false
-                if (viewModel.isFavorite) {
-                    viewModel.deleteFromFavorites(movie)
-                    (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    viewModel.isFavorite = !viewModel.isFavorite
-                } else {
-                    try {
-                        withContext(Dispatchers.IO) {
-                            movie.poster =
-                                movie.generateImageUrl().getImageAsBitmap(requireContext())
-                        }
-
-                        viewModel.addToFavorites(movie)
-                        (it as ImageButton).setImageResource(R.drawable.ic_baseline_favorite_24)
-                        viewModel.isFavorite = !viewModel.isFavorite
-
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            requireContext(),
-                            "Couldn't Save Movie Try Again",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                action(movie)
                 it.isClickable = true
             }
-
         }
     }
 
