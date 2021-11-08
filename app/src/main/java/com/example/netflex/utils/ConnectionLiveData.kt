@@ -6,12 +6,11 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
-import androidx.lifecycle.LiveData
-import com.example.netflex.retrofit.RetrofitConstants
+import androidx.lifecycle.MutableLiveData
 import java.lang.Exception
 import java.net.URL
 
-class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
+class ConnectionLiveData(context: Context) : MutableLiveData<Boolean>() {
 
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
@@ -19,7 +18,10 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
     private val validNetworks: MutableSet<Network> = HashSet()
 
     private fun checkValidNetworks() {
-        postValue(validNetworks.size > 0)
+        val result = validNetworks.size > 0
+        if (result != this.value){
+            postValue(result)
+        }
     }
 
     override fun onActive() {
@@ -28,7 +30,6 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
             .addCapability(NET_CAPABILITY_INTERNET)
             .build()
         cm.registerNetworkCallback(networkRequest, networkCallback)
-        if (this.value == null) postValue(false)
     }
 
     override fun onInactive() {
@@ -42,7 +43,7 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
             val hasInternetCapability = networkCapabilities?.hasCapability(NET_CAPABILITY_INTERNET)
             if (hasInternetCapability == true) {
                 try {
-                    network.openConnection(URL(RetrofitConstants.BASE_URL)).connect()
+                    network.openConnection(URL(GOOGLE_URL)).connect()
                     validNetworks.add(network)
                     checkValidNetworks()
                 }catch (e: Exception){
@@ -56,6 +57,10 @@ class ConnectionLiveData(context: Context) : LiveData<Boolean>() {
             checkValidNetworks()
         }
 
+    }
+
+    companion object{
+        private const val GOOGLE_URL = "https://www.google.com"
     }
 
 }

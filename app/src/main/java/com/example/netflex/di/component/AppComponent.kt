@@ -6,6 +6,7 @@ import com.example.netflex.di.module.RetrofitModule
 import com.example.netflex.repository.MovieRepository
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
@@ -17,6 +18,9 @@ interface AppComponent {
     @Component.Builder
     interface Builder{
         fun build(): AppComponent
+
+        @BindsInstance
+        fun baseUrl(@Named("baseUrl") url: String): Builder
 
         @BindsInstance
         fun app(app: MyApp): Builder

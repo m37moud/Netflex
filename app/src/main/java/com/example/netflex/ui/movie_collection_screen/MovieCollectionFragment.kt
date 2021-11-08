@@ -41,6 +41,7 @@ class MovieCollectionFragment :
     }
 
     private fun configureConnectivity() {
+        viewModel.setupConnectionLivedata()
         setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
             if (viewModel.moviesLiveData.value!!.isEmpty()) loadContentToViewModel()
@@ -86,11 +87,13 @@ class MovieCollectionFragment :
     }
 
     private fun onMovieClick(movie: Movie) {
-        val action =
-            MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
-                movie
-            )
-        findNavController().navigate(action)
+        if (findNavController().currentDestination?.id == R.id.movieCollectionFragment){
+            val action =
+                MovieCollectionFragmentDirections.actionMovieCollectionFragmentToMovieDetailsFragment(
+                    movie
+                )
+            findNavController().navigate(action)
+        }
     }
 
     override val inflate: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieCollectionBinding
