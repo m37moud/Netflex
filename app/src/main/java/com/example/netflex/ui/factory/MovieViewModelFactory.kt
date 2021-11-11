@@ -1,4 +1,4 @@
-package com.example.netflex.fragment.viewmodel.factory
+package com.example.netflex.ui.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

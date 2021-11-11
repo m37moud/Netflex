@@ -1,6 +1,5 @@
 package com.example.netflex.retrofit
 
-import com.example.netflex.utils.RetrofitConstants
 import retrofit2.http.GET
 import retrofit2.http.Query
 
