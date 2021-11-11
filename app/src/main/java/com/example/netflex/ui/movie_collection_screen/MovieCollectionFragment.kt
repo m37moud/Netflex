@@ -39,7 +39,7 @@ class MovieCollectionFragment :
         configurePopupMenu()
         configureConnectivity()
         adapter = setRecyclerAdapter()
-        if (viewModel.category == MovieCategories.Favorite) loadContentToViewModel()
+        if (viewModel.category == MovieCategories.Favorite) loadMovies()
         setLifecycleObserver(vm.moviesLiveData) {
             adapter.setData(it)
         }
@@ -50,7 +50,7 @@ class MovieCollectionFragment :
         viewModel.setupConnectionLivedata()
         setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
-            if (viewModel.moviesLiveData.value!!.isEmpty()) loadContentToViewModel()
+            if (viewModel.moviesLiveData.value!!.isEmpty()) loadMovies()
         }
     }
 
@@ -67,7 +67,7 @@ class MovieCollectionFragment :
                 R.id.item_top_rated -> viewModel.category = MovieCategories.TopRated
                 R.id.item_favorites -> viewModel.category = MovieCategories.Favorite
             }
-            loadContentToViewModel()
+            loadMovies()
             false
         }
     }
@@ -79,12 +79,12 @@ class MovieCollectionFragment :
         with(binding.rvMovies){
             adapter = mAdapter
             layoutManager = manager
-            addOnScrollListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
+            addOnScrollListener(RecyclerScrollListener(manager, ::loadMovies))
         }
         return mAdapter
     }
 
-    private fun loadContentToViewModel(isPagingCallback: Boolean = false){
+    private fun loadMovies(isPagingCallback: Boolean = false){
         if (isPagingCallback && viewModel.category == MovieCategories.Favorite) return
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.progressImages.isVisible = true
