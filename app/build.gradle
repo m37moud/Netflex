@@ -35,6 +35,19 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        create("popular") {
+            dimension = "version"
+            applicationIdSuffix = ".popular"
+        }
+
+        create("toprated") {
+            dimension = "version"
+            applicationIdSuffix = ".topRated"
+        }
+    }
 }
 
 apply plugin: 'kotlin-kapt'

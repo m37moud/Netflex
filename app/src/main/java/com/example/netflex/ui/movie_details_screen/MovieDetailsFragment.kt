@@ -51,6 +51,10 @@ class MovieDetailsFragment :
                 action = viewModel::addToFavorites
             }
         }
+
+        binding.backNavButton.setOnClickListener  {
+            requireActivity().onBackPressed()
+        }
     }
 
     private fun configureAddToFavorites() {

@@ -13,49 +13,46 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MovieCollectionViewModel(private val app: Application,
-                               private val movieRepository: MovieRepository)
-    : ViewModel() {
+                               private val movieRepository: MovieRepository) : ViewModel() {
 
     lateinit var connectionLiveData: ConnectionLiveData
     private var response: ApiResponse? = null
+    private val movies: ArrayList<Movie> = arrayListOf()
     var category: MovieCategories = MovieCategories.TopRated
         set(value) {
-            _moviesLiveData.value!!.clear()
+            movies.clear()
             response = null
             field = value
         }
 
-    private val _moviesLiveData: MutableLiveData<ArrayList<Movie>> = MutableLiveData(arrayListOf())
+    private val _moviesLiveData: MutableLiveData<ArrayList<Movie>> = MutableLiveData(movies)
     val moviesLiveData: LiveData<ArrayList<Movie>> get() = _moviesLiveData
 
     suspend fun addMoviesToRecyclerView() {
-        if (connectionLiveData.value == false) return
+        if (connectionLiveData.value == false && category != MovieCategories.Favorite) return
         withContext(Dispatchers.IO) {
             response = getCorrespondingResponse()
         }
-        _moviesLiveData.value!!.addAll(response?.results!!)
+        movies.addAll(response?.results!!)
+        _moviesLiveData.value = movies
     }
 
     private suspend fun getCorrespondingResponse(): ApiResponse? {
-        var mResponse: ApiResponse? = null
-
-        when (category) {
-            MovieCategories.Popular -> mResponse = fetchPopularMovies(response?.page?.plus(1) ?: 1)
-            MovieCategories.TopRated -> mResponse = fetchTopRatedMovies(response?.page?.plus(1) ?: 1)
+        return when (category) {
+            MovieCategories.Popular -> fetchPopularMovies(response?.page?.plus(1) ?: 1)
+            MovieCategories.TopRated -> fetchTopRatedMovies(response?.page?.plus(1) ?: 1)
             MovieCategories.Favorite -> {
-            } // TODO: Configure later
+                movies.clear()
+                ApiResponse(-1, fetchAllSavedMovies())
+            }
         }
-
-        return mResponse
     }
 
-    private suspend fun fetchPopularMovies(page: Int): ApiResponse? {
-        return movieRepository.fetchPopularMovies(page)
-    }
+    private suspend fun fetchPopularMovies(page: Int) = movieRepository.fetchPopularMovies(page)
 
-    private suspend fun fetchTopRatedMovies(page: Int): ApiResponse? {
-        return movieRepository.fetchTopRatedMovies(page)
-    }
+    private suspend fun fetchTopRatedMovies(page: Int) = movieRepository.fetchTopRatedMovies(page)
+
+    private suspend fun fetchAllSavedMovies() = movieRepository.fetchAllSavedMovies()
 
     fun setupConnectionLivedata() {
         connectionLiveData = ConnectionLiveData(app.baseContext)

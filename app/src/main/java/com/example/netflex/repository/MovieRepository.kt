@@ -1,7 +1,6 @@
 package com.example.netflex.repository
 
 import com.example.netflex.model.Movie
-import com.example.netflex.retrofit.ApiResponse
 import com.example.netflex.retrofit.MovieApi
 import com.example.netflex.room_database.dao.MovieDao
 import javax.inject.Inject
@@ -21,4 +20,6 @@ class MovieRepository @Inject constructor(private val movieDao: MovieDao,
     override suspend fun deleteMovie(movie: Movie) = movieDao.deleteMovie(movie)
 
     override suspend fun checkIsSaved(id: Int): Boolean = movieDao.checkIsSaved(id)
+
+    override suspend fun fetchAllSavedMovies(): MutableList<Movie> = movieDao.fetchAllSavedMovies()
 }

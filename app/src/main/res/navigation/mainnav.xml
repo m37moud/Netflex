@@ -25,6 +25,10 @@
         <action
             android:id="@+id/action_movieCollectionFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <argument
+            android:name="deletedMovieId"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailsFragment"
@@ -33,7 +37,9 @@
         tools:layout="@layout/fragment_movie_details" >
         <action
             android:id="@+id/action_movieDetailsFragment_to_movieCollectionFragment"
-            app:destination="@id/movieCollectionFragment" />
+            app:destination="@id/movieCollectionFragment"
+            app:popUpTo="@id/movieDetailsFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="clickedMovie"
             app:argType="com.example.netflex.model.Movie" />

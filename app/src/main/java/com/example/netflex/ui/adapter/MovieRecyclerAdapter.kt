@@ -1,5 +1,6 @@
 package com.example.netflex.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,7 @@ class MovieRecyclerAdapter(
             val poster = binding.ivPoster
         }
 
-    private var data = mutableListOf<Movie>()
+    private var data = listOf<Movie>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -42,10 +43,16 @@ class MovieRecyclerAdapter(
         return data.size
     }
 
-    fun setData(movies: MutableList<Movie>){
-        this.data = movies
+    fun setData(movies: List<Movie>){
         val myDiffUtil = DiffUtils(data, movies)
         myDiffUtil.setDataToAdapter(this)
+        this.data = movies
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearData(){
+        this.data = listOf()
+        notifyDataSetChanged()
     }
 
 }

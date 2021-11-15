@@ -7,6 +7,7 @@ import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.netflex.R
 import com.example.netflex.databinding.FragmentMovieCollectionBinding
@@ -23,6 +24,10 @@ import kotlinx.coroutines.launch
 class MovieCollectionFragment :
     BaseFragment<FragmentMovieCollectionBinding, MovieCollectionViewModel>() {
 
+    private val args: MovieCollectionFragmentArgs by navArgs()
+    private val movieId: Int
+        get() = args.deletedMovieId
+
     override val viewModelClass: Class<MovieCollectionViewModel>
         get() = MovieCollectionViewModel::class.java
 
@@ -34,16 +39,18 @@ class MovieCollectionFragment :
         configurePopupMenu()
         configureConnectivity()
         adapter = setRecyclerAdapter()
+        if (viewModel.category == MovieCategories.Favorite) loadMovies()
         setLifecycleObserver(vm.moviesLiveData) {
             adapter.setData(it)
         }
+
     }
 
     private fun configureConnectivity() {
         viewModel.setupConnectionLivedata()
         setLifecycleObserver(viewModel.connectionLiveData) {
             binding.connectionLostLabel.isVisible = !it
-            if (viewModel.moviesLiveData.value!!.isEmpty()) loadContentToViewModel()
+            if (viewModel.moviesLiveData.value!!.isEmpty()) loadMovies()
         }
     }
 
@@ -54,18 +61,13 @@ class MovieCollectionFragment :
             popupMenu.show()
         }
         popupMenu.setOnMenuItemClickListener {
-            val category = viewModel.category
+            adapter.clearData()
             when (it.itemId) {
-                R.id.item_popular -> if (category != MovieCategories.Popular) {
-                    viewModel.category = MovieCategories.Popular
-                    loadContentToViewModel()
-                }
-                R.id.item_top_rated -> if (category != MovieCategories.TopRated) {
-                    viewModel.category = MovieCategories.TopRated
-                    loadContentToViewModel()
-                }
-                R.id.item_favorites -> if (category != MovieCategories.Favorite) viewModel.category = MovieCategories.Favorite
+                R.id.item_popular -> viewModel.category = MovieCategories.Popular
+                R.id.item_top_rated -> viewModel.category = MovieCategories.TopRated
+                R.id.item_favorites -> viewModel.category = MovieCategories.Favorite
             }
+            loadMovies()
             false
         }
     }
@@ -77,12 +79,13 @@ class MovieCollectionFragment :
         with(binding.rvMovies){
             adapter = mAdapter
             layoutManager = manager
-            addOnScrollListener(RecyclerScrollListener(manager, ::loadContentToViewModel))
+            addOnScrollListener(RecyclerScrollListener(manager, ::loadMovies))
         }
         return mAdapter
     }
 
-    private fun loadContentToViewModel(){
+    private fun loadMovies(isPagingCallback: Boolean = false){
+        if (isPagingCallback && viewModel.category == MovieCategories.Favorite) return
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.progressImages.isVisible = true
             viewModel.addMoviesToRecyclerView()
