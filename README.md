@@ -8,9 +8,15 @@ User can click any of the movies , to see it's details  <br>
 or add it to favorites which will save it locally on the device  <br>
 When the phone is not connected to the internet, only favorites  <br>
 page is available where user can see all the saved movies 
-
-
+<br>
+<br>
 <p>
-App details:
+  App details:
+  <ul>
+    <li>Minimum SDK - 21</li>
+    <li>Target SDK - 30</li>
+    <li>Compile SDK - 30</li>
+    <li>Build Flavors - top rated, popular</li>
+</ul>
 </p>
 
