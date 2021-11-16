@@ -10,20 +10,19 @@ When the phone is not connected to the internet, only favorites  <br>
 page is available where user can see all the saved movies 
 <br>
 <br>
-
-  App details:
+App details:
+<ul>
+  <li>Minimum SDK - 21</li>
+  <li>Target SDK - 30</li>
+  <li>Compile SDK - 30</li>
+  <li>Build Flavors - top rated, popular</li>
+</ul>
+Used libraries:
   <ul>
-    <li>Minimum SDK - 21</li>
-    <li>Target SDK - 30</li>
-    <li>Compile SDK - 30</li>
-    <li>Build Flavors - top rated, popular</li>
-  </ul>
-  Used libraries:
-    <ul>
-    <li>Android navigation <li>2.3.5</li></li>
-    <li>Target SDK - 30</li>
-    <li>Compile SDK - 30</li>
-    <li>Build Flavors - top rated, popular</li>
-  </ul>
+  <li>Android navigation <ul><li>2.3.5</li></ul></li>
+  <li>Target SDK - 30</li>
+  <li>Compile SDK - 30</li>
+  <li>Build Flavors - top rated, popular</li>
+</ul>
 
 
