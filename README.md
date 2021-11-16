@@ -10,7 +10,7 @@ When the phone is not connected to the internet, only favorites  <br>
 page is available where user can see all the saved movies 
 <br>
 <br>
-<p>
+
   App details:
   <ul>
     <li>Minimum SDK - 21</li>
@@ -25,5 +25,5 @@ page is available where user can see all the saved movies
     <li>Compile SDK - 30</li>
     <li>Build Flavors - top rated, popular</li>
   </ul>
-</p>
+
 
