@@ -9,3 +9,8 @@ or add it to favorites which will save it locally on the device  <br>
 When the phone is not connected to the internet, only favorites  <br>
 page is available where user can see all the saved movies 
 
+
+<p>
+App details:
+</p>
+
