@@ -17,6 +17,13 @@ page is available where user can see all the saved movies
     <li>Target SDK - 30</li>
     <li>Compile SDK - 30</li>
     <li>Build Flavors - top rated, popular</li>
-</ul>
+  </ul>
+  Used libraries:
+    <ul>
+    <li>Android navigation <li>2.3.5</li></li>
+    <li>Target SDK - 30</li>
+    <li>Compile SDK - 30</li>
+    <li>Build Flavors - top rated, popular</li>
+  </ul>
 </p>
 
